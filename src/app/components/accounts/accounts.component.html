@@ -1,0 +1,11 @@
+<h2>Accounts</h2>
+
+<button mat-mini-fab color="accent" aria-label="add account" (click)="this.ui.setMode('add-account')">
+    <mat-icon>add</mat-icon>
+</button>
+
+<ul *ngFor="let account of this.data.getAccounts()">
+    <p>Name: {{account.name}} </p>
+    <p>Type: {{account.type}} </p>
+    <p>Balance: {{account.balance}} </p>
+</ul>

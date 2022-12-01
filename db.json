@@ -1,19 +1,27 @@
 {
-  "posts": [
-    {
-      "id": 1,
-      "title": "json-server",
-      "author": "typicode"
+    "data": {
+        "accounts": [
+            {
+                "id": 1,
+                "name": "main",
+                "type": "checking",
+                "balance": 1000
+            }
+        ],
+        "budgets": [
+            {
+                "id": 1,
+                "name": "grocery",
+                "total": 0
+            }
+        ],
+        "transactions": [
+            {
+                "id": 1,
+                "destination": "whole foods",
+                "amount": 500,
+                "budget": 1
+            }
+        ]
     }
-  ],
-  "comments": [
-    {
-      "id": 1,
-      "body": "some comment",
-      "postId": 1
-    }
-  ],
-  "profile": {
-    "name": "typicode"
-  }
 }

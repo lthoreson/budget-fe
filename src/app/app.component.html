@@ -1,21 +1,27 @@
-<p>
-  <mat-toolbar color="primary">
-    <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" [matMenuTriggerFor]="menu">
-      <mat-icon>menu</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="this.ui.setMode('dashboard')" disabled="{{ this.ui.getMode() === 'dashboard' ? true : false }}">Dashboard</button>
-      <button mat-menu-item (click)="this.ui.setMode('accounts')" disabled="{{ this.ui.getMode() === 'accounts' ? true : false }}">Accounts</button>
-      <button mat-menu-item (click)="this.ui.setMode('budgets')" disabled="{{ this.ui.getMode() === 'budgets' ? true : false }}">Budgets</button>
-      <button mat-menu-item (click)="this.ui.setMode('transactions')" disabled="{{ this.ui.getMode() === 'transactions' ? true : false }}">Transactions</button>
-    </mat-menu>
-    <mat-icon> monetization_on</mat-icon>
-    <span>Budget Badger</span>
-    <span class="example-spacer"></span>
-  </mat-toolbar>
-</p>
+<mat-toolbar color="primary">
+  <button mat-icon-button aria-label="Example icon-button with menu icon" [matMenuTriggerFor]="menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <!-- Buttons are disabled if they lead to the current view -->
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="this.ui.setMode('dashboard')"
+      disabled="{{ this.ui.getMode() === 'dashboard' ? true : false }}">Dashboard</button>
+    <button mat-menu-item (click)="this.ui.setMode('accounts')"
+      disabled="{{ this.ui.getMode() === 'accounts' ? true : false }}">Accounts</button>
+    <button mat-menu-item (click)="this.ui.setMode('budgets')"
+      disabled="{{ this.ui.getMode() === 'budgets' ? true : false }}">Budgets</button>
+    <button mat-menu-item (click)="this.ui.setMode('transactions')"
+      disabled="{{ this.ui.getMode() === 'transactions' ? true : false }}">Transactions</button>
+  </mat-menu>
+  <mat-icon> monetization_on</mat-icon>
+  <span>Budget Badger</span>
+  <span class="example-spacer"></span>
+</mat-toolbar>
 
-<!-- Switch between components based on current ui mode -->
+
+<!-- Switch between views based on current ui mode -->
 <div [ngSwitch]="this.ui.getMode()">
   <app-dashboard *ngSwitchCase="'dashboard'"></app-dashboard>
+  <app-accounts *ngSwitchCase="'accounts'"></app-accounts>
+  <app-add-account *ngSwitchCase="'add-account'"></app-add-account>
 </div>
