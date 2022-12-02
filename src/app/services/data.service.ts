@@ -43,6 +43,16 @@ export class DataService {
         }
       })
   }
+  public addTrans(input: Transaction): void {
+    console.log(input)
+    this.http.post<Transaction>(this.url + "/transactions", input).pipe(take(1))
+      .subscribe({
+        next: (result) => {
+          this.transactions.push(result)
+          this.ui.setMode("transactions")
+        }
+      })
+  }
 
   public loadAccts(): void {
     console.log("accts requested")

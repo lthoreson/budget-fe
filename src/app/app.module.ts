@@ -9,6 +9,7 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import {MatInputModule} from '@angular/material/input';
+import {MatTableModule} from '@angular/material/table';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -19,6 +20,7 @@ import { FormsModule } from '@angular/forms';
 import { BudgetsComponent } from './components/budgets/budgets.component';
 import { TransactionsComponent } from './components/transactions/transactions.component';
 import { AddBudgetComponent } from './components/add-budget/add-budget.component';
+import { AddTransactionComponent } from './components/add-transaction/add-transaction.component';
 
 
 @NgModule({
@@ -29,7 +31,8 @@ import { AddBudgetComponent } from './components/add-budget/add-budget.component
     AddAccountComponent,
     BudgetsComponent,
     TransactionsComponent,
-    AddBudgetComponent
+    AddBudgetComponent,
+    AddTransactionComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +45,8 @@ import { AddBudgetComponent } from './components/add-budget/add-budget.component
     MatMenuModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatInputModule
+    MatInputModule,
+    MatTableModule
   ],
   providers: [],
   bootstrap: [AppComponent]

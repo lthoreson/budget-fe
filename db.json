@@ -48,6 +48,18 @@
       "destination": "whole foods",
       "amount": 500,
       "budget": 1
+    },
+    {
+      "id": 2,
+      "destination": "pg&e",
+      "amount": 100,
+      "budget": "3"
+    },
+    {
+      "id": 3,
+      "destination": "whole foods",
+      "amount": 100,
+      "budget": "1"
     }
   ]
 }

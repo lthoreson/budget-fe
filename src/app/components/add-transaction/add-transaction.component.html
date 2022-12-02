@@ -1,0 +1,18 @@
+<h1>Add New Transaction</h1>
+<form>
+    <mat-form-field appearance="fill">
+        <mat-label for="destination">Destination</mat-label>
+        <input name="destination" matInput [(ngModel)]="this.userInput.destination">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label for="amount">Amount</mat-label>
+        <input name="amount" matInput type="number" [(ngModel)]="this.userInput.amount">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label for="budget">Type</mat-label>
+        <mat-select name="budget" [(ngModel)]="this.userInput.budget">
+            <mat-option *ngFor="let budget of this.data.getBudgets()" value="{{budget.id}}">{{budget.name}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="this.addTrans()">Submit</button>
+</form>
