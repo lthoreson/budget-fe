@@ -3,18 +3,18 @@ import { DataService } from 'src/app/services/data.service';
 import { UiService } from 'src/app/services/ui.service';
 
 @Component({
-  selector: 'app-accounts',
-  templateUrl: './accounts.component.html',
-  styleUrls: ['./accounts.component.css']
+  selector: 'app-budgets',
+  templateUrl: './budgets.component.html',
+  styleUrls: ['./budgets.component.css']
 })
-export class AccountsComponent implements OnInit {
+export class BudgetsComponent implements OnInit {
   constructor(public data: DataService, public ui: UiService) {
-    console.log("accounts constructed")
+    console.log("budgets constructed")
   }
 
   ngOnInit(): void {
-    console.log("accounts initialized")
-    this.data.loadAccts()
+    console.log("budgets initialized")
+    this.data.loadBudgets()
   }
 
 }

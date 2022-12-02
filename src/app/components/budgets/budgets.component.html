@@ -1,0 +1,10 @@
+<h1>Budgets</h1>
+
+<button mat-mini-fab color="accent" aria-label="add budget" (click)="this.ui.setMode('add-budget')">
+    <mat-icon>add</mat-icon>
+</button>
+
+<ul *ngFor="let budget of this.data.getBudgets()">
+    <p>Name: {{budget.name}} </p>
+    <p>Total: {{budget.total}} </p>
+</ul>

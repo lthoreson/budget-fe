@@ -1,1 +1,19 @@
-<p>add-account works!</p>
+<h1>Add New Account</h1>
+<form>
+    <mat-form-field appearance="fill">
+        <mat-label for="name">Name</mat-label>
+        <input name="name" matInput [(ngModel)]="this.userInput.name">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label for="type">Type</mat-label>
+        <mat-select name="type" [(ngModel)]="this.userInput.type">
+            <mat-option value="checking">Checking</mat-option>
+            <mat-option value="savings">Savings</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label for="balance">Balance</mat-label>
+        <input name="balance" matInput type="number" [(ngModel)]="this.userInput.balance">
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="this.addAccount()">Submit</button>
+</form>
