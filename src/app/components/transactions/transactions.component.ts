@@ -14,7 +14,7 @@ export class TransactionsComponent {
   public filters: Filter = {
     id: null,
     destination: null,
-    amount: null,
+    account: null,
     budget: null
   }
 
@@ -49,7 +49,8 @@ export class TransactionsComponent {
     let result = this.data.getTransactions()
     for (let k in this.filters) {
       if (this.filters[k as keyof Filter]) {
-        result = result.filter((trans) => trans[k as keyof Filter] === this.filters[k as keyof Filter])
+        // if user selects a filter, modify result to include only transactions with matching field value
+        result = result.filter((transaction) => transaction[k as keyof Transaction]?.toString() === this.filters[k as keyof Filter])
       }
     }
     return result

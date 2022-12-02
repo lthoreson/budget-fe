@@ -1,6 +1,6 @@
 export interface Filter {
     id: null | number
     destination: null | string
-    amount: null | number
+    account: null | number
     budget: null | number
 }
