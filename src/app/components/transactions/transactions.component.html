@@ -9,7 +9,8 @@
             <mat-form-field appearance="fill">
                 <mat-label for="budget">Filter by Destination</mat-label>
                 <mat-select name="budget" [(ngModel)]="this.filters.destination">
-                    <mat-option *ngFor="let transaction of this.data.getTransactions()" value="{{transaction.destination}}">{{transaction.destination}}</mat-option>
+                    <mat-option value="">-- no filter --</mat-option>
+                    <mat-option *ngFor="let destination of this.getDestinations()" value="{{destination}}">{{destination}}</mat-option>
                 </mat-select>
             </mat-form-field>
         </td>
@@ -20,29 +21,35 @@
     <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
   
-    <!-- Position Column -->
+    <!-- ID Column -->
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef> No. </th>
       <td mat-cell *matCellDef="let element"> {{element.id}} </td>
     </ng-container>
   
-    <!-- Name Column -->
+    <!-- Destination Column -->
     <ng-container matColumnDef="destination">
       <th mat-header-cell *matHeaderCellDef> Destination </th>
       <td mat-cell *matCellDef="let element"> {{element.destination}} </td>
     </ng-container>
   
-    <!-- Weight Column -->
+    <!-- Amount Column -->
     <ng-container matColumnDef="amount">
       <th mat-header-cell *matHeaderCellDef> Amount </th>
       <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
     </ng-container>
   
-    <!-- Symbol Column -->
+    <!-- Budget Column -->
     <ng-container matColumnDef="budget">
       <th mat-header-cell *matHeaderCellDef> Budget </th>
       <td mat-cell *matCellDef="let element"> {{this.getBudgetName(element.budget)}} </td>
     </ng-container>
+
+    <!-- Account Column -->
+    <ng-container matColumnDef="account">
+        <th mat-header-cell *matHeaderCellDef> Account </th>
+        <td mat-cell *matCellDef="let element"> {{this.getAccountName(element.account)}} </td>
+      </ng-container>
   
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

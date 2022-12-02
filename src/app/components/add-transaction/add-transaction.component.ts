@@ -9,7 +9,7 @@ import { Transaction } from 'src/data/transaction';
   styleUrls: ['./add-transaction.component.css']
 })
 export class AddTransactionComponent implements OnInit {
-  public userInput: Transaction = new Transaction(null, '', 0, 0)
+  public userInput: Transaction = new Transaction(null, '', 0, 0, 0)
 
   constructor(public data: DataService, public ui: UiService) {
     console.log("budgets constructed")
@@ -18,9 +18,12 @@ export class AddTransactionComponent implements OnInit {
   ngOnInit(): void {
     console.log("budgets initialized")
     this.data.loadBudgets()
+    this.data.loadAccts()
   }
 
   public addTrans(): void {
+    this.userInput.budget = Number(this.userInput.budget)
+    this.userInput.account = Number(this.userInput.account)
     this.data.addTrans(this.userInput)
   }
 

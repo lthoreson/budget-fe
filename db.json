@@ -47,19 +47,43 @@
       "id": 1,
       "destination": "whole foods",
       "amount": 500,
-      "budget": 1
+      "budget": 1,
+      "account": 1
     },
     {
       "id": 2,
       "destination": "pg&e",
       "amount": 100,
-      "budget": "3"
+      "budget": 3,
+      "account": 1
     },
     {
       "id": 3,
       "destination": "whole foods",
       "amount": 100,
-      "budget": "1"
+      "budget": 1,
+      "account": 1
+    },
+    {
+      "id": 4,
+      "destination": "pg&e",
+      "amount": 0,
+      "budget": 3,
+      "account": 1
+    },
+    {
+      "id": 5,
+      "destination": "pg&e",
+      "amount": 0,
+      "budget": 1,
+      "account": 1
+    },
+    {
+      "id": 6,
+      "destination": "whole foods",
+      "amount": 6,
+      "budget": 1,
+      "account": 1
     }
   ]
 }

@@ -10,7 +10,7 @@ import { Transaction } from 'src/data/transaction';
   styleUrls: ['./transactions.component.css']
 })
 export class TransactionsComponent {
-  public displayedColumns: string[] = ['id', 'destination', 'amount', 'budget'];
+  public displayedColumns: string[] = ['id', 'destination', 'amount', 'budget', 'account'];
   public filters: Filter = {
     id: null,
     destination: null,
@@ -26,10 +26,23 @@ export class TransactionsComponent {
     console.log("transactions initialized")
     this.data.loadTrans()
     this.data.loadBudgets()
+    this.data.loadAccts()
   }
 
   public getBudgetName(id: number): string | undefined {
-    return this.data.getBudgets().find((budget) => budget.id === Number(id))?.name
+    return this.data.getBudgets().find((budget) => budget.id === id)?.name
+  }
+  public getAccountName(id: number): string | undefined {
+    return this.data.getAccounts().find((account) => account.id === id)?.name
+  }
+  public getDestinations(): string[] {
+    let result: string[] = []
+    for (let transaction of this.data.getTransactions()) {
+      if (!result.includes(transaction.destination)) {
+        result.push(transaction.destination)
+      }
+    }
+    return result
   }
 
   public filterTransactions(): Transaction[] {
