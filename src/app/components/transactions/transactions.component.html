@@ -4,6 +4,7 @@
     <mat-icon>add</mat-icon>
 </button>
 <button (click)="this.data.autoAssign()">Auto-assign missing budgets</button>
+<button (click)="this.generateCsv()">Export to .csv</button>
 <table mat-table [dataSource]="this.sortData(this.filterTransactions())" class="mat-elevation-z8" matSort (matSortChange)="setSort($event)">
 
     <!--- Note that these columns can be defined in any order.

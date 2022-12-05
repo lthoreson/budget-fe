@@ -22,7 +22,8 @@ export class TransactionsComponent {
   }
 
   // receives event when user clicks a sort header
-  private sort: Sort = {active: '', direction: ''}
+  private sort: Sort = { active: '', direction: '' }
+  private csv = encodeURI("data:text/csv;charset=utf-8,")
 
   constructor(public data: DataService, public ui: UiService) {
     console.log("transactions constructed")
@@ -74,13 +75,13 @@ export class TransactionsComponent {
       const isAsc = this.sort.direction === 'asc';
       switch (this.sort.active) {
         case 'id':
-          return compare(a.id?a.id:0, b.id?b.id:0, isAsc);
+          return compare(a.id ? a.id : 0, b.id ? b.id : 0, isAsc);
         case 'destination':
           return compare(a.destination, b.destination, isAsc);
         case 'amount':
           return compare(a.amount, b.amount, isAsc);
         case 'budget':
-          return compare(a.budget?a.budget:0, b.budget?b.budget:0, isAsc);
+          return compare(a.budget ? a.budget : 0, b.budget ? b.budget : 0, isAsc);
         case 'account':
           return compare(a.account, b.account, isAsc);
         default:
@@ -88,6 +89,16 @@ export class TransactionsComponent {
       }
     })
     return sorted
+  }
+  public generateCsv() {
+    let allData = this.sortData(this.filterTransactions())
+    let csvContent = "data:text/csv;charset=utf-8,ID,Destination,Amount,Budget,Account\n"
+    allData.map(row => {
+      csvContent += row.id + "," + row.destination + "," + row.amount + "," +
+        this.getBudgetName(Number(row.budget)) + "," +
+        this.getAccountName(row.account) + "\n"
+    })
+    window.open(encodeURI(csvContent))
   }
 
 }
