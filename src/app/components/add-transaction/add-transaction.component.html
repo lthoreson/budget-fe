@@ -1,8 +1,13 @@
 <h1>Add New Transaction</h1>
 <form>
     <mat-form-field appearance="fill">
+        <mat-autocomplete #destination="matAutocomplete" (optionSelected)="this.suggestBudget()">
+            <mat-option *ngFor="let destination of this.data.getDestinations()" [value]="destination">
+                {{destination}}
+            </mat-option>
+        </mat-autocomplete>
         <mat-label for="destination">Destination</mat-label>
-        <input name="destination" matInput [(ngModel)]="this.userInput.destination">
+        <input name="destination" matInput [(ngModel)]="this.userInput.destination" [matAutocomplete]="destination">
     </mat-form-field>
     <mat-form-field appearance="fill">
         <mat-label for="amount">Amount</mat-label>
@@ -10,14 +15,15 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
         <mat-label for="budget">Budget</mat-label>
-        <mat-select name="budget" [(ngModel)]="this.userInput.budget">
+        <mat-select name="budget" [(ngModel)]="selected">
             <mat-option *ngFor="let budget of this.data.getBudgets()" value="{{budget.id}}">{{budget.name}}</mat-option>
         </mat-select>
     </mat-form-field>
     <mat-form-field appearance="fill">
-        <mat-label for="budget">Account</mat-label>
-        <mat-select name="budget" [(ngModel)]="this.userInput.account">
-            <mat-option *ngFor="let account of this.data.getAccounts()" value="{{account.id}}">{{account.name}}</mat-option>
+        <mat-label for="account">Account</mat-label>
+        <mat-select name="account" [(ngModel)]="this.userInput.account">
+            <mat-option *ngFor="let account of this.data.getAccounts()" value="{{account.id}}">{{account.name}}
+            </mat-option>
         </mat-select>
     </mat-form-field>
     <button mat-raised-button color="primary" (click)="this.addTrans()">Submit</button>

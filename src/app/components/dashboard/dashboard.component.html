@@ -1,1 +1,11 @@
-<p>dashboard works!</p>
+<h1>Dashboard</h1>
+<h2>Accounts</h2>
+<div *ngFor="let account of this.data.getAccounts()">
+    <h3>{{ account.name }}</h3>
+    <p>Balance: {{ this.getAccountBalance(account) }}</p>
+</div>
+<h2>Budgets</h2>
+<div *ngFor="let budget of this.data.getBudgets()">
+    <h3>{{ budget.name }}</h3>
+    <p>Balance: {{ this.getBudgetBalance(budget) }}</p>
+</div>

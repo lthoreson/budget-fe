@@ -22,6 +22,8 @@ import { BudgetsComponent } from './components/budgets/budgets.component';
 import { TransactionsComponent } from './components/transactions/transactions.component';
 import { AddBudgetComponent } from './components/add-budget/add-budget.component';
 import { AddTransactionComponent } from './components/add-transaction/add-transaction.component';
+import { GuageComponent } from './components/guage/guage.component';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 
 @NgModule({
@@ -33,7 +35,8 @@ import { AddTransactionComponent } from './components/add-transaction/add-transa
     BudgetsComponent,
     TransactionsComponent,
     AddBudgetComponent,
-    AddTransactionComponent
+    AddTransactionComponent,
+    GuageComponent
   ],
   imports: [
     BrowserModule,
@@ -48,7 +51,8 @@ import { AddTransactionComponent } from './components/add-transaction/add-transa
     MatSelectModule,
     MatInputModule,
     MatTableModule,
-    MatSortModule
+    MatSortModule,
+    MatAutocompleteModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,3 +1,4 @@
+import { transition } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, take } from 'rxjs';
@@ -17,14 +18,13 @@ export class DataService {
 
   constructor(private http: HttpClient, private ui: UiService) {
     console.log("data service constructed")
-   }
+  }
 
   private searchDb(category: string, key: string, value: number | string): Observable<any> {
     return this.http.get<any>(this.url + "/" + category + "?" + key + "=" + value).pipe(take(1))
   }
 
   public addAccount(input: Account): void {
-    console.log(input)
     this.http.post<Account>(this.url + "/accounts", input).pipe(take(1))
       .subscribe({
         next: (result) => {
@@ -34,7 +34,6 @@ export class DataService {
       })
   }
   public addBudget(input: Budget): void {
-    console.log(input)
     this.http.post<Budget>(this.url + "/budgets", input).pipe(take(1))
       .subscribe({
         next: (result) => {
@@ -44,7 +43,6 @@ export class DataService {
       })
   }
   public addTrans(input: Transaction): void {
-    console.log(input)
     this.http.post<Transaction>(this.url + "/transactions", input).pipe(take(1))
       .subscribe({
         next: (result) => {
@@ -54,9 +52,42 @@ export class DataService {
       })
   }
 
+  public addAssociation(input: Transaction): void {
+    // stop if destination is already associated with a budget
+    for (let budget of this.getBudgets()) {
+      if (budget.associations.includes(input.destination)) {
+        return
+      }
+    }
+
+    // otherwise, add the transaction's destination to the budget's associations array
+    let modBudget = this.getBudgets().find((budget) => budget.id === input.budget)
+    modBudget?.associations.push(input.destination)
+    this.http.put(this.url + "/budgets/" + input.budget, modBudget).pipe(take(1))
+      .subscribe({
+        next: () => this.loadBudgets()
+      })
+  }
+
+  public autoAssign(): void {
+    for (let transaction of this.transactions) {
+      if (transaction.budget === 0) {
+        let associatedBudget = this.budgets.find((budget) => budget.associations.includes(transaction.destination))
+        if (associatedBudget) {
+          const copy = {...transaction}
+          copy.budget = associatedBudget.id
+          this.http.put<Transaction>(this.url + "/transactions/" + transaction.id, copy).pipe(take(1))
+            .subscribe({
+              next: (result) => transaction.budget = result.budget
+            })
+        }
+      }
+    }
+  }
+
   public loadAccts(): void {
     console.log("accts requested")
-    this.http.get<Account[]>(this.url+"/accounts").pipe(take(1))
+    this.http.get<Account[]>(this.url + "/accounts").pipe(take(1))
       .subscribe({
         next: (result) => {
           this.accounts = result
@@ -66,7 +97,7 @@ export class DataService {
   }
   public loadBudgets(): void {
     console.log("budgets requested")
-    this.http.get<Budget[]>(this.url+"/budgets").pipe(take(1))
+    this.http.get<Budget[]>(this.url + "/budgets").pipe(take(1))
       .subscribe({
         next: (result) => {
           this.budgets = result
@@ -76,7 +107,7 @@ export class DataService {
   }
   public loadTrans(): void {
     console.log("trans requested")
-    this.http.get<Transaction[]>(this.url+"/transactions").pipe(take(1))
+    this.http.get<Transaction[]>(this.url + "/transactions").pipe(take(1))
       .subscribe({
         next: (result) => {
           this.transactions = result
@@ -86,15 +117,25 @@ export class DataService {
   }
 
   public getAccounts(): Account[] {
-    console.log("accounts updated from memory")
+    // console.log("accounts updated from memory")
     return this.accounts
   }
   public getBudgets(): Budget[] {
-    console.log("budgets updated from memory")
+    // console.log("budgets updated from memory")
     return this.budgets
   }
   public getTransactions(): Transaction[] {
+    // console.log("transactions updated from memory")
     return this.transactions
-    console.log("transactions updated from memory")
+  }
+  // returns list of all unique destinations
+  public getDestinations(): string[] {
+    let result: string[] = []
+    for (let transaction of this.transactions) {
+      if (!result.includes(transaction.destination)) {
+        result.push(transaction.destination)
+      }
+    }
+    return result
   }
 }

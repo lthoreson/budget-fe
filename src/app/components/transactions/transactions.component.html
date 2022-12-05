@@ -3,6 +3,7 @@
 <button mat-mini-fab color="accent" aria-label="add transaction" (click)="this.ui.setMode('add-transaction')">
     <mat-icon>add</mat-icon>
 </button>
+<button (click)="this.data.autoAssign()">Auto-assign missing budgets</button>
 <table mat-table [dataSource]="this.sortData(this.filterTransactions())" class="mat-elevation-z8" matSort (matSortChange)="setSort($event)">
 
     <!--- Note that these columns can be defined in any order.
@@ -25,7 +26,7 @@
                     <mat-label for="destinationFilter">Filter</mat-label>
                     <mat-select name="destinationFilter" [(ngModel)]="this.filters.destination">
                         <mat-option value="">-- no filter --</mat-option>
-                        <mat-option *ngFor="let destination of this.getDestinations()" value="{{destination}}">
+                        <mat-option *ngFor="let destination of this.data.getDestinations()" value="{{destination}}">
                             {{destination}}</mat-option>
                     </mat-select>
                 </mat-form-field>

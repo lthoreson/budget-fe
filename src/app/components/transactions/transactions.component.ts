@@ -48,17 +48,6 @@ export class TransactionsComponent {
     return this.data.getAccounts().find((account) => account.id === id)?.name
   }
 
-  // eliminates duplicate destinations from the filter options
-  public getDestinations(): string[] {
-    let result: string[] = []
-    for (let transaction of this.data.getTransactions()) {
-      if (!result.includes(transaction.destination)) {
-        result.push(transaction.destination)
-      }
-    }
-    return result
-  }
-
   public filterTransactions(): Transaction[] {
     let result = this.data.getTransactions()
     for (let k in this.filters) {
@@ -91,7 +80,7 @@ export class TransactionsComponent {
         case 'amount':
           return compare(a.amount, b.amount, isAsc);
         case 'budget':
-          return compare(a.budget, b.budget, isAsc);
+          return compare(a.budget?a.budget:0, b.budget?b.budget:0, isAsc);
         case 'account':
           return compare(a.account, b.account, isAsc);
         default:

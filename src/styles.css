@@ -2,6 +2,6 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-h1, h2, button, mat-form-field {
+h1, h2, h3, p, button, mat-form-field {
     margin: 2rem;
 }
