@@ -5,7 +5,6 @@ import { Account } from 'src/data/account';
 import { Budget } from 'src/data/budget'
 import { Transaction } from 'src/data/transaction';
 import { UiService } from './ui.service';
-import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +15,7 @@ export class DataService {
   private budgets: Budget[] = []
   private transactions: Transaction[] = []
 
-  constructor(private http: HttpClient, private ui: UiService, private snackBar: MatSnackBar) {
+  constructor(private http: HttpClient, private ui: UiService) {
     console.log("data service constructed")
   }
 
@@ -27,7 +26,7 @@ export class DataService {
           this.accounts.push(result)
           this.ui.setMode("accounts")
         },
-        error: (e) => this.snackBar.open("Error: submission failed")
+        error: (e) => this.ui.prompt("Error: submission failed")
       })
   }
   public addBudget(input: Budget): void {
@@ -37,7 +36,7 @@ export class DataService {
           this.budgets.push(result)
           this.ui.setMode("budgets")
         },
-        error: (e) => this.snackBar.open("Error: submission failed")
+        error: (e) => this.ui.prompt("Error: submission failed")
       })
   }
   public addTrans(input: Transaction): void {
@@ -47,11 +46,15 @@ export class DataService {
           this.transactions.push(result)
           this.addAssociation(result)
         },
-        error: (e) => this.snackBar.open("Error: submission failed")
+        error: (e) => this.ui.prompt("Error: submission failed")
       })
   }
 
   public addAssociation(input: Transaction): void {
+    if (!input.budget) {
+      this.ui.setMode("transactions")
+      return
+    }
     // stop if destination is already associated with a budget
     for (let budget of this.getBudgets()) {
       if (budget.associations.includes(input.destination)) {
@@ -61,25 +64,28 @@ export class DataService {
     }
     // otherwise, add the transaction's destination to its budget's associations array
     let modBudget = this.getBudgets().find((budget) => budget.id === input.budget)
-    modBudget?.associations.push(input.destination)
+    if (!modBudget) {
+      return // budget reference was invalid
+    }
+    modBudget.associations.push(input.destination)
     this.http.put(this.url + "/budgets/" + input.budget, modBudget).pipe(take(1))
       .subscribe({
         next: () => this.ui.setMode("transactions"),
-        error: (e) => this.snackBar.open("Error: budget association not saved")
+        error: (e) => this.ui.prompt("Error: budget association not saved")
       })
   }
 
   public autoAssign(): void {
     for (let transaction of this.transactions) {
-      if (transaction.budget === 0) {
+      if (!transaction.budget) {
         let associatedBudget = this.budgets.find((budget) => budget.associations.includes(transaction.destination))
         if (associatedBudget) {
-          const copy = {...transaction}
+          const copy = { ...transaction }
           copy.budget = associatedBudget.id
           this.http.put<Transaction>(this.url + "/transactions/" + transaction.id, copy).pipe(take(1))
             .subscribe({
               next: (result) => transaction.budget = result.budget,
-              error: (e) => this.snackBar.open("Error: changes were not saved")
+              error: (e) => this.ui.prompt("Error: changes were not saved")
             })
         }
       }
@@ -94,7 +100,7 @@ export class DataService {
           this.accounts = result
           console.log("accounts received")
         },
-        error: (e) => this.snackBar.open("Error: lost connection to server")
+        error: (e) => this.ui.prompt("Error: lost connection to server")
       })
   }
   public loadBudgets(): void {
@@ -105,7 +111,7 @@ export class DataService {
           this.budgets = result
           console.log("budgets received")
         },
-        error: (e) => this.snackBar.open("Error: lost connection to server")
+        error: (e) => this.ui.prompt("Error: lost connection to server")
       })
   }
   public loadTrans(): void {
@@ -116,7 +122,7 @@ export class DataService {
           this.transactions = result
           console.log("trans received")
         },
-        error: (e) => this.snackBar.open("Error: lost connection to server")
+        error: (e) => this.ui.prompt("Error: lost connection to server")
       })
   }
 

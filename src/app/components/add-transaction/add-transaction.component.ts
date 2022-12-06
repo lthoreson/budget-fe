@@ -10,7 +10,8 @@ import { Transaction } from 'src/data/transaction';
 })
 export class AddTransactionComponent implements OnInit {
   public userInput: Transaction = new Transaction(null, '', 0, null, 1)
-  public selected: string | undefined = ''
+  public budgetID: string | undefined = ''
+  public accountType: string = '1'
 
   constructor(public data: DataService, public ui: UiService) {
     console.log("budgets constructed")
@@ -20,18 +21,23 @@ export class AddTransactionComponent implements OnInit {
     console.log("budgets initialized")
     this.data.loadBudgets()
     this.data.loadAccts()
+    this.data.loadTrans()
   }
 
   public addTrans(): void {
-    this.userInput.budget = Number(this.selected)
-    this.userInput.account = Number(this.userInput.account)
+    if (this.userInput.destination === '') {
+      this.ui.prompt("Please enter a destination")
+      return
+    }
+    this.userInput.budget = this.budgetID ? Number(this.budgetID) : null
+    this.userInput.account = Number(this.accountType)
     this.data.addTrans(this.userInput)
   }
 
   public suggestBudget(): void {
     let suggestion = this.data.getBudgets().find((budget) => budget.associations.includes(this.userInput.destination))
     if (suggestion) {
-      this.selected = suggestion.id?.toString()
+      this.budgetID = String(suggestion.id)
     }
   }
 
