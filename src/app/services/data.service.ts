@@ -1,11 +1,11 @@
-import { transition } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, take } from 'rxjs';
+import { take } from 'rxjs';
 import { Account } from 'src/data/account';
 import { Budget } from 'src/data/budget'
 import { Transaction } from 'src/data/transaction';
 import { UiService } from './ui.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -16,12 +16,8 @@ export class DataService {
   private budgets: Budget[] = []
   private transactions: Transaction[] = []
 
-  constructor(private http: HttpClient, private ui: UiService) {
+  constructor(private http: HttpClient, private ui: UiService, private snackBar: MatSnackBar) {
     console.log("data service constructed")
-  }
-
-  private searchDb(category: string, key: string, value: number | string): Observable<any> {
-    return this.http.get<any>(this.url + "/" + category + "?" + key + "=" + value).pipe(take(1))
   }
 
   public addAccount(input: Account): void {
@@ -30,7 +26,8 @@ export class DataService {
         next: (result) => {
           this.accounts.push(result)
           this.ui.setMode("accounts")
-        }
+        },
+        error: (e) => this.snackBar.open("Error: submission failed")
       })
   }
   public addBudget(input: Budget): void {
@@ -39,7 +36,8 @@ export class DataService {
         next: (result) => {
           this.budgets.push(result)
           this.ui.setMode("budgets")
-        }
+        },
+        error: (e) => this.snackBar.open("Error: submission failed")
       })
   }
   public addTrans(input: Transaction): void {
@@ -47,8 +45,9 @@ export class DataService {
       .subscribe({
         next: (result) => {
           this.transactions.push(result)
-          this.ui.setMode("transactions")
-        }
+          this.addAssociation(result)
+        },
+        error: (e) => this.snackBar.open("Error: submission failed")
       })
   }
 
@@ -56,16 +55,17 @@ export class DataService {
     // stop if destination is already associated with a budget
     for (let budget of this.getBudgets()) {
       if (budget.associations.includes(input.destination)) {
+        this.ui.setMode("transactions")
         return
       }
     }
-
-    // otherwise, add the transaction's destination to the budget's associations array
+    // otherwise, add the transaction's destination to its budget's associations array
     let modBudget = this.getBudgets().find((budget) => budget.id === input.budget)
     modBudget?.associations.push(input.destination)
     this.http.put(this.url + "/budgets/" + input.budget, modBudget).pipe(take(1))
       .subscribe({
-        next: () => this.loadBudgets()
+        next: () => this.ui.setMode("transactions"),
+        error: (e) => this.snackBar.open("Error: budget association not saved")
       })
   }
 
@@ -78,7 +78,8 @@ export class DataService {
           copy.budget = associatedBudget.id
           this.http.put<Transaction>(this.url + "/transactions/" + transaction.id, copy).pipe(take(1))
             .subscribe({
-              next: (result) => transaction.budget = result.budget
+              next: (result) => transaction.budget = result.budget,
+              error: (e) => this.snackBar.open("Error: changes were not saved")
             })
         }
       }
@@ -92,7 +93,8 @@ export class DataService {
         next: (result) => {
           this.accounts = result
           console.log("accounts received")
-        }
+        },
+        error: (e) => this.snackBar.open("Error: lost connection to server")
       })
   }
   public loadBudgets(): void {
@@ -102,7 +104,8 @@ export class DataService {
         next: (result) => {
           this.budgets = result
           console.log("budgets received")
-        }
+        },
+        error: (e) => this.snackBar.open("Error: lost connection to server")
       })
   }
   public loadTrans(): void {
@@ -112,7 +115,8 @@ export class DataService {
         next: (result) => {
           this.transactions = result
           console.log("trans received")
-        }
+        },
+        error: (e) => this.snackBar.open("Error: lost connection to server")
       })
   }
 

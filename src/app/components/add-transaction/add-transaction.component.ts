@@ -26,7 +26,6 @@ export class AddTransactionComponent implements OnInit {
     this.userInput.budget = Number(this.selected)
     this.userInput.account = Number(this.userInput.account)
     this.data.addTrans(this.userInput)
-    this.data.addAssociation(this.userInput)
   }
 
   public suggestBudget(): void {

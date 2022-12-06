@@ -42,11 +42,13 @@ export class TransactionsComponent {
   }
 
   // converts ids to names for better table presentation
-  public getBudgetName(id: number): string | undefined {
-    return this.data.getBudgets().find((budget) => budget.id === id)?.name
+  public getBudgetName(id: number | null): string {
+    const matched = this.data.getBudgets().find((budget) => budget.id === id)
+    return matched ? matched.name : ""
   }
-  public getAccountName(id: number): string | undefined {
-    return this.data.getAccounts().find((account) => account.id === id)?.name
+  public getAccountName(id: number | null): string {
+    const matched = this.data.getAccounts().find((account) => account.id === id)
+    return matched ? matched.name : ""
   }
 
   public filterTransactions(): Transaction[] {
@@ -75,15 +77,15 @@ export class TransactionsComponent {
       const isAsc = this.sort.direction === 'asc';
       switch (this.sort.active) {
         case 'id':
-          return compare(a.id ? a.id : 0, b.id ? b.id : 0, isAsc);
+          return compare(Number(a.id), Number(b.id), isAsc);
         case 'destination':
           return compare(a.destination, b.destination, isAsc);
         case 'amount':
           return compare(a.amount, b.amount, isAsc);
         case 'budget':
-          return compare(a.budget ? a.budget : 0, b.budget ? b.budget : 0, isAsc);
+          return compare(this.getBudgetName(a.budget), this.getBudgetName(b.budget), isAsc);
         case 'account':
-          return compare(a.account, b.account, isAsc);
+          return compare(this.getAccountName(a.account), this.getAccountName(b.account), isAsc);
         default:
           return 0;
       }
@@ -93,11 +95,11 @@ export class TransactionsComponent {
   public generateCsv() {
     let allData = this.sortData(this.filterTransactions())
     let csvContent = "data:text/csv;charset=utf-8,ID,Destination,Amount,Budget,Account\n"
-    allData.map(row => {
+    for (let row of allData) {
       csvContent += row.id + "," + row.destination + "," + row.amount + "," +
         this.getBudgetName(Number(row.budget)) + "," +
         this.getAccountName(row.account) + "\n"
-    })
+    }
     window.open(encodeURI(csvContent))
   }
 

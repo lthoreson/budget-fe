@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { DataService } from 'src/app/services/data.service';
+import { UiService } from 'src/app/services/ui.service';
 import { Budget } from 'src/data/budget';
 
 @Component({
@@ -10,7 +11,7 @@ import { Budget } from 'src/data/budget';
 export class AddBudgetComponent {
   public userInput: Budget = new Budget(null, '', 0)
 
-  constructor(public data: DataService) { }
+  constructor(public data: DataService, private ui: UiService) { }
 
   public addBudget(): void {
     this.data.addBudget(this.userInput)

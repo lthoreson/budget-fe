@@ -24,6 +24,7 @@ import { AddBudgetComponent } from './components/add-budget/add-budget.component
 import { AddTransactionComponent } from './components/add-transaction/add-transaction.component';
 import { GuageComponent } from './components/guage/guage.component';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -52,7 +53,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     MatInputModule,
     MatTableModule,
     MatSortModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]
