@@ -1,11 +1,12 @@
 <h1>Transactions</h1>
 
-<button mat-mini-fab color="accent" aria-label="add transaction" (click)="this.ui.setMode('add-transaction')">
+<button mat-mini-fab aria-label="add transaction" (click)="this.ui.setMode('add-transaction')">
     <mat-icon>add</mat-icon>
 </button>
-<button (click)="this.data.autoAssign()">Auto-assign missing budgets</button>
-<button (click)="this.generateCsv()">Export to .csv</button>
-<table mat-table [dataSource]="this.sortData(this.filterTransactions())" class="mat-elevation-z8" matSort (matSortChange)="setSort($event)">
+<button mat-raised-button (click)="this.data.autoAssign()">Auto-assign missing budgets</button>
+<button mat-raised-button (click)="this.generateCsv()">Export to .csv</button>
+<table mat-table [dataSource]="this.sortData(this.filterTransactions())" class="mat-elevation-z8" matSort
+    (matSortChange)="setSort($event)">
 
     <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
@@ -19,14 +20,14 @@
     <!-- Destination Column -->
     <ng-container matColumnDef="destination">
         <th mat-sort-header="destination" mat-header-cell *matHeaderCellDef>Destination
-            <button mat-icon-button aria-label="destination filter" [matMenuTriggerFor]="menu">
+            <button mat-icon-button aria-label="destination filter" [matMenuTriggerFor]="menu"  (click)="$event.stopPropagation()">
                 <mat-icon>filter_list</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
                 <mat-form-field appearance="fill">
                     <mat-label for="destinationFilter">Filter</mat-label>
                     <mat-select name="destinationFilter" [(ngModel)]="this.filters.destination">
-                        <mat-option value="">-- no filter --</mat-option>
+                        <mat-option>-- no filter --</mat-option>
                         <mat-option *ngFor="let destination of this.data.getDestinations()" value="{{destination}}">
                             {{destination}}</mat-option>
                     </mat-select>
@@ -44,15 +45,15 @@
 
     <!-- Budget Column -->
     <ng-container matColumnDef="budget">
-        <th  mat-sort-header="budget" mat-header-cell *matHeaderCellDef>Budget
-            <button mat-icon-button aria-label="destination filter" [matMenuTriggerFor]="menu">
+        <th mat-sort-header="budget" mat-header-cell *matHeaderCellDef>Budget
+            <button mat-icon-button aria-label="destination filter" [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
                 <mat-icon>filter_list</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
                 <mat-form-field appearance="fill">
                     <mat-label for="bFilter">Filter</mat-label>
                     <mat-select name="bFilter" [(ngModel)]="this.filters.budget">
-                        <mat-option value="">-- no filter --</mat-option>
+                        <mat-option>-- no filter --</mat-option>
                         <mat-option *ngFor="let budget of this.data.getBudgets()" value="{{budget.id}}">
                             {{budget.name}}</mat-option>
                     </mat-select>
@@ -65,14 +66,14 @@
     <!-- Account Column -->
     <ng-container matColumnDef="account">
         <th mat-sort-header="account" mat-header-cell *matHeaderCellDef>Account
-            <button mat-icon-button aria-label="destination filter" [matMenuTriggerFor]="menu">
+            <button mat-icon-button aria-label="destination filter" [matMenuTriggerFor]="menu"  (click)="$event.stopPropagation()">
                 <mat-icon>filter_list</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
                 <mat-form-field appearance="fill">
                     <mat-label for="aFilter">Filter</mat-label>
                     <mat-select name="aFilter" [(ngModel)]="this.filters.account">
-                        <mat-option value="">-- no filter --</mat-option>
+                        <mat-option>-- no filter --</mat-option>
                         <mat-option *ngFor="let account of this.data.getAccounts()" value="{{account.id}}">
                             {{account.name}}</mat-option>
                     </mat-select>
