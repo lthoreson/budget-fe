@@ -75,6 +75,13 @@ export class DataService {
       })
   }
 
+  public edit(input: Transaction, value: string): void {
+    const i: number = this.transactions.findIndex((t) => t.id === input.id)
+    const transaction: Transaction = this.transactions[i]
+    transaction.amount = Number(value)
+    this.ui.afterEdit()
+  }
+
   public autoAssign(): void {
     let complete = true
     let found = false

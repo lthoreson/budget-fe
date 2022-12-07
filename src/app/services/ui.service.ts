@@ -9,6 +9,7 @@ export class UiService {
   private modes: string[] = [
     "accounts","budgets","transactions","add-account","add-budget","add-transaction"
   ]
+  private edited: boolean = false
 
   constructor(private snackBar: MatSnackBar) {
     // restores session state so user can refresh the current page without starting over
@@ -28,7 +29,13 @@ export class UiService {
   private storeMode(input: string): void {
     localStorage.setItem("mode", input)
   }
-  public prompt(message: string) {
+  public prompt(message: string): void {
     this.snackBar.open(message, "Close")
+  }
+  public afterEdit(): void {
+    this.edited = true
+  }
+  public getEdit(): boolean {
+    return this.edited
   }
 }
