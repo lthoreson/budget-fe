@@ -33,11 +33,8 @@ export class UiService {
   public prompt(message: string): void {
     this.snackBar.open(message, "Close")
   }
-  public afterEdit(): void {
-    this.edit = true
-  }
-  public afterSave(): void {
-    this.edit = false
+  public setEdit(state: boolean): void {
+    this.edit = state
   }
   public getEditState(): boolean {
     return this.edit

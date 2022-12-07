@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Sort } from '@angular/material/sort';
+import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/services/data.service';
 import { UiService } from 'src/app/services/ui.service';
 import { Filter } from 'src/data/filter';
@@ -10,8 +11,11 @@ import { Transaction } from 'src/data/transaction';
   templateUrl: './transactions.component.html',
   styleUrls: ['./transactions.component.css']
 })
-export class TransactionsComponent {
-  public displayedColumns: string[] = ['id', 'destination', 'amount', 'budget', 'account'];
+export class TransactionsComponent implements OnInit, OnDestroy {
+  public displayedColumns: string[] = ['id', 'destination', 'amount', 'budget', 'account']
+  private news: Subscription
+  public transactions: Transaction[] = []
+  private edits: number[] = []
 
   // uses ngModel to track selected filters
   public filters: Filter = {
@@ -27,6 +31,8 @@ export class TransactionsComponent {
 
   constructor(public data: DataService, public ui: UiService) {
     console.log("transactions constructed")
+    this.news = this.data.sendUpdate()
+      .subscribe((result) => this.transactions = result)
   }
 
   ngOnInit(): void {
@@ -34,6 +40,9 @@ export class TransactionsComponent {
     this.data.loadTrans()
     this.data.loadBudgets()
     this.data.loadAccts()
+  }
+  ngOnDestroy(): void {
+    this.news.unsubscribe()
   }
 
   // event handler for sort buttons
@@ -52,7 +61,7 @@ export class TransactionsComponent {
   }
 
   public filterTransactions(): Transaction[] {
-    let result = this.data.getTransactions()
+    let result = this.transactions
     for (let k in this.filters) {
       if (this.filters[k as keyof Filter]) {
 
@@ -92,6 +101,27 @@ export class TransactionsComponent {
     })
     return sorted
   }
+
+  public edit(target: Transaction): void {
+    if (!this.edits.includes(Number(target.id))) {
+      this.edits.push(Number(target.id))
+    }
+  }
+
+  public saveTrans(): void {
+    for (let id of this.edits) {
+      const index = this.transactions.findIndex((t) => t.id === id)
+      if (index !== -1) {
+        const target = this.transactions[index]
+        target.amount = Number(target.amount)
+        target.budget = Number(target.budget)
+        target.account = Number(target.account)
+        this.data.saveTran(target)
+      }
+    }
+    this.ui.setEdit(false)
+  }
+
   public generateCsv() {
     let allData = this.sortData(this.filterTransactions())
     let csvContent = "data:text/csv;charset=utf-8,ID,Destination,Amount,Budget,Account\n"

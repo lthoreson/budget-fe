@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { take } from 'rxjs';
+import { Observable, Subject, take } from 'rxjs';
 import { Account } from 'src/data/account';
 import { Budget } from 'src/data/budget'
 import { Transaction } from 'src/data/transaction';
@@ -14,7 +14,7 @@ export class DataService {
   private accounts: Account[] = []
   private budgets: Budget[] = []
   private transactions: Transaction[] = []
-  private editedTrans: number[] = []
+  private transUpdate: Subject<Transaction[]> = new Subject()
 
   constructor(private http: HttpClient, private ui: UiService) {
     console.log("data service constructed")
@@ -76,37 +76,11 @@ export class DataService {
       })
   }
 
-  public edit(input: Transaction, key: keyof Transaction, value: string): void {
-    const index = this.transactions.findIndex((t) => t.id === input.id)
-    const transaction = this.transactions[index]
-    function editor<T extends keyof Transaction>(k: T, v: Transaction[T]): void {
-      transaction[k] = v
-    }
-    if (key === "destination") {
-      editor<"destination">("destination",value)
-    } else {
-      editor<keyof Transaction>(key, Number(value))
-    }
-    if (!this.editedTrans.includes(Number(transaction.id))) {
-      this.editedTrans.push(Number(transaction.id))
-    }
-    this.ui.afterEdit()
-  }
-
-  public saveTrans(): void {
-    for (let id of this.editedTrans) {
-      const index = this.transactions.findIndex((t) => t.id === id)
-      if (index !== -1) {
-        this.http.put<Transaction>(this.url + "/transactions/" + id, this.transactions[index]).pipe(take(1)).subscribe({
-          next: (result) => {
-            this.transactions[index] = result
-            console.log("saved", result)
-          },
-          error: () => this.ui.prompt("Error: Server did not respond")
-        })
-      }
-    }
-    this.ui.afterSave()
+  public saveTran(target: Transaction): void {
+    this.http.put<Transaction>(this.url + "/transactions/" + target.id, target).pipe(take(1)).subscribe({
+      next: (result) => console.log("saved", result),
+      error: () => this.ui.prompt("Error: Server did not respond")
+    })
   }
 
   public autoAssign(): void {
@@ -164,6 +138,7 @@ export class DataService {
       .subscribe({
         next: (result) => {
           this.transactions = result
+          this.transUpdate.next(result)
           console.log("trans received")
         },
         error: (e) => this.ui.prompt("Error: lost connection to server")
@@ -181,6 +156,9 @@ export class DataService {
   public getTransactions(): Transaction[] {
     // console.log("transactions updated from memory")
     return this.transactions
+  }
+  public sendUpdate(): Observable<Transaction[]> {
+    return this.transUpdate.asObservable()
   }
   // returns list of all unique destinations
   public getDestinations(): string[] {
