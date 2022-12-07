@@ -5,6 +5,8 @@
 </button>
 <button mat-raised-button (click)="data.autoAssign()">Auto-assign missing budgets</button>
 <button mat-raised-button (click)="generateCsv()">Export to .csv</button>
+<button *ngIf="!ui.getEditState()" mat-raised-button (click)="ui.afterEdit()">Edit</button>
+<button *ngIf="ui.getEditState()" mat-raised-button (click)="data.saveTrans()">Save</button>
 <table mat-table [dataSource]="sortData(filterTransactions())" class="mat-elevation-z8" matSort
     (matSortChange)="setSort($event)">
 
@@ -43,7 +45,7 @@
         <th mat-sort-header="amount" mat-header-cell *matHeaderCellDef> Amount </th>
         <td mat-cell *matCellDef="let element">
             {{element.amount}}
-            <input #self name="amount" matInput type="number" (keyup)="data.edit(element, self.value)">
+            <input #self name="amount" matInput type="number" (keyup)="data.edit(element, 'amount', self.value)">
         </td>
     </ng-container>
 

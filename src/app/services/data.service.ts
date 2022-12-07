@@ -14,6 +14,7 @@ export class DataService {
   private accounts: Account[] = []
   private budgets: Budget[] = []
   private transactions: Transaction[] = []
+  private editedTrans: number[] = []
 
   constructor(private http: HttpClient, private ui: UiService) {
     console.log("data service constructed")
@@ -71,15 +72,37 @@ export class DataService {
     this.http.put(this.url + "/budgets/" + input.budget, modBudget).pipe(take(1))
       .subscribe({
         next: () => this.ui.setMode("transactions"),
-        error: (e) => this.ui.prompt("Error: budget association not saved")
+        error: () => this.ui.prompt("Error: budget association not saved")
       })
   }
 
-  public edit(input: Transaction, value: string): void {
-    const i: number = this.transactions.findIndex((t) => t.id === input.id)
-    const transaction: Transaction = this.transactions[i]
-    transaction.amount = Number(value)
+  public edit<T extends keyof Transaction>(input: Transaction, key: T, value: string): void {
+    let numValue = Number(value)
+    const index: number = this.transactions.findIndex((t) => t.id === input.id)
+    const transaction = this.transactions[index]
+    if (key !== "destination") {
+      transaction[key] = value as Transaction[T]
+    } else {
+      transaction[key] = numValue as Transaction[T]
+    }
+    if (!this.editedTrans.includes(Number(transaction.id))) {
+      this.editedTrans.push(Number(transaction.id))
+    }
+    console.log(this.editedTrans)
     this.ui.afterEdit()
+  }
+
+  public saveTrans(): void {
+    for (let id of this.editedTrans) {
+      const index = this.transactions.findIndex((t) => t.id === id)
+      if (index !== -1) {
+        this.http.put<Transaction>(this.url + "/transactions/" + id, this.transactions[index]).pipe(take(1)).subscribe({
+          next: (result) => {this.transactions[index] = result; console.log(result)},
+          error: () => this.ui.prompt("Error: Server did not respond")
+        })
+      }
+    }
+    this.ui.afterSave()
   }
 
   public autoAssign(): void {

@@ -45,35 +45,35 @@
     {
       "id": 1,
       "destination": "Whole Foods",
-      "amount": 500,
+      "amount": "5",
       "budget": 1,
       "account": 1
     },
     {
       "id": 2,
       "destination": "PG&E",
-      "amount": 100,
+      "amount": "10",
       "budget": 3,
       "account": 1
     },
     {
       "id": 3,
       "destination": "Whole Foods",
-      "amount": 100,
+      "amount": "5",
       "budget": 1,
       "account": 1
     },
     {
       "id": 4,
       "destination": "PG&E",
-      "amount": 0,
+      "amount": "10",
       "budget": 3,
       "account": 1
     },
     {
       "id": 5,
       "destination": "PG&E",
-      "amount": 0,
+      "amount": "10",
       "budget": 1,
       "account": 1
     },
@@ -87,49 +87,49 @@
     {
       "id": 7,
       "destination": "Disney World",
-      "amount": 1000,
+      "amount": "100",
       "budget": 4,
       "account": 2
     },
     {
       "id": 8,
       "destination": "PG&E",
-      "amount": 100,
+      "amount": "10",
       "budget": 3,
       "account": 1
     },
     {
       "id": 9,
       "destination": "Whole Foods",
-      "amount": 10,
+      "amount": "5",
       "budget": 1,
       "account": 1
     },
     {
       "id": 10,
       "destination": "Comcast",
-      "amount": 100,
+      "amount": "10",
       "budget": 3,
       "account": 1
     },
     {
       "id": 11,
       "destination": "Verizon",
-      "amount": 50,
+      "amount": "20",
       "budget": 3,
       "account": 1
     },
     {
       "id": 12,
       "destination": "Verizon",
-      "amount": 50,
+      "amount": "20",
       "budget": 3,
       "account": 1
     },
     {
       "id": 13,
       "destination": "Whole Foods",
-      "amount": 10,
+      "amount": "5",
       "budget": 1,
       "account": 1
     },
@@ -143,56 +143,56 @@
     {
       "id": 15,
       "destination": "Whole Foods",
-      "amount": 10,
+      "amount": "5",
       "budget": 1,
       "account": 1
     },
     {
       "id": 16,
       "destination": "Whole Foods",
-      "amount": 10,
+      "amount": "5",
       "budget": 1,
       "account": 1
     },
     {
       "id": 17,
       "destination": "Target",
-      "amount": 10,
+      "amount": "1",
       "budget": null,
       "account": 1
     },
     {
       "id": 18,
       "destination": "Target",
-      "amount": 10,
+      "amount": "1",
       "budget": null,
       "account": 1
     },
     {
       "id": 19,
       "destination": "Target",
-      "amount": 10,
+      "amount": "1",
       "budget": null,
       "account": 1
     },
     {
       "id": 20,
       "destination": "Target",
-      "amount": 10,
+      "amount": "1",
       "budget": null,
       "account": 1
     },
     {
       "id": 21,
       "destination": "Target",
-      "amount": 10,
+      "amount": "1",
       "budget": null,
       "account": 1
     },
     {
       "id": 22,
       "destination": "",
-      "amount": 0,
+      "amount": "4",
       "budget": null,
       "account": 1
     }
