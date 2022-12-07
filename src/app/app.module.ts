@@ -25,6 +25,8 @@ import { AddTransactionComponent } from './components/add-transaction/add-transa
 import { GuageComponent } from './components/guage/guage.component';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatCardModule} from '@angular/material/card';
 
 
 @NgModule({
@@ -54,7 +56,9 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     MatTableModule,
     MatSortModule,
     MatAutocompleteModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatProgressBarModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]

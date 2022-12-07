@@ -14,6 +14,10 @@ export class AddAccountComponent {
   constructor(public data: DataService, private ui: UiService) { }
 
   addAccount(): void {
+    if (this.userInput.name === "") {
+      this.ui.prompt("Please enter a name")
+      return
+    }
     this.data.addAccount(this.userInput)
   }
 }

@@ -29,6 +29,6 @@ export class UiService {
     localStorage.setItem("mode", input)
   }
   public prompt(message: string) {
-    this.snackBar.open(message)
+    this.snackBar.open(message, "Close")
   }
 }

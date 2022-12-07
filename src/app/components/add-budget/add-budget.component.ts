@@ -14,6 +14,10 @@ export class AddBudgetComponent {
   constructor(public data: DataService, private ui: UiService) { }
 
   public addBudget(): void {
+    if (this.userInput.name === "") {
+      this.ui.prompt("Please enter a name")
+      return
+    }
     this.data.addBudget(this.userInput)
   }
 

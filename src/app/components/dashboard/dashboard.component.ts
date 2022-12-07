@@ -36,4 +36,16 @@ export class DashboardComponent implements OnInit {
     return balance
   }
 
+  public getMeterColor(amount: number): string {
+    let color = "primary"
+    console.log(amount)
+    if (amount < 50) {
+      color = "accent"
+    }
+    if (amount < 20) {
+      color = "warn"
+    }
+    return color
+  }
+
 }

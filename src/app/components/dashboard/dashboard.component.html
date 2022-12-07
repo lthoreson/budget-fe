@@ -1,11 +1,29 @@
 <h1>Dashboard</h1>
-<h2><a (click)="this.ui.setMode('accounts')">Accounts</a></h2>
-<div *ngFor="let account of this.data.getAccounts()">
-    <h3>{{ account.name }}</h3>
-    <p>Balance: {{ this.getAccountBalance(account) }}</p>
-</div>
-<h2><a (click)="this.ui.setMode('budgets')">Budgets</a></h2>
-<div *ngFor="let budget of this.data.getBudgets()">
-    <h3>{{ budget.name }}</h3>
-    <p>Balance: {{ this.getBudgetBalance(budget) }}</p>
-</div>
+<a (click)="this.ui.setMode('accounts')">
+    <h2>Accounts</h2>
+</a>
+<mat-card class="example-card" *ngFor="let account of data.getAccounts()">
+    <mat-card-content>
+        <h3>{{ account.name }}</h3>
+        <p>Balance: {{ getAccountBalance(account) | currency }}</p>
+        <section>
+            <mat-progress-bar #self mode="determinate" value="{{100*getAccountBalance(account)/account.balance}}"
+                color="{{getMeterColor(self.value)}}">
+            </mat-progress-bar>
+        </section>
+    </mat-card-content>
+</mat-card>
+<a (click)="this.ui.setMode('budgets')">
+    <h2>Budgets</h2>
+</a>
+<mat-card class="example-card" *ngFor="let budget of this.data.getBudgets()">
+    <mat-card-content>
+        <h3>{{ budget.name }}</h3>
+        <p>Balance: {{ this.getBudgetBalance(budget) | currency }}</p>
+        <section>
+            <mat-progress-bar #self mode="determinate" value="{{100*this.getBudgetBalance(budget)/budget.total}}"
+                color="{{getMeterColor(self.value)}}">
+            </mat-progress-bar>
+        </section>
+    </mat-card-content>
+</mat-card>

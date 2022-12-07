@@ -76,19 +76,29 @@ export class DataService {
   }
 
   public autoAssign(): void {
+    let complete = true
+    let found = false
     for (let transaction of this.transactions) {
       if (!transaction.budget) {
+        complete = false
         let associatedBudget = this.budgets.find((budget) => budget.associations.includes(transaction.destination))
         if (associatedBudget) {
+          found = true
           const copy = { ...transaction }
           copy.budget = associatedBudget.id
           this.http.put<Transaction>(this.url + "/transactions/" + transaction.id, copy).pipe(take(1))
             .subscribe({
               next: (result) => transaction.budget = result.budget,
-              error: (e) => this.ui.prompt("Error: changes were not saved")
+              error: (e) => this.ui.prompt("Error: server did not respond")
             })
         }
       }
+    }
+    if (complete) {
+      this.ui.prompt("All transactions have been assigned already")
+    }
+    if (!found) {
+      this.ui.prompt("No budgets found for these transactions")
     }
   }
 
