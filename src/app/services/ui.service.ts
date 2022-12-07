@@ -24,6 +24,7 @@ export class UiService {
   }
   public setMode(input: string = "dashboard"): void {
     this.mode = input
+    this.edit = false
     this.storeMode(input)
   }
   private storeMode(input: string): void {

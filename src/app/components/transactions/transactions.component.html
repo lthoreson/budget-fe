@@ -3,7 +3,7 @@
 <button mat-mini-fab aria-label="add transaction" (click)="ui.setMode('add-transaction')">
     <mat-icon>add</mat-icon>
 </button>
-<button mat-raised-button (click)="data.autoAssign()">Auto-assign missing budgets</button>
+<button mat-raised-button (click)="data.autoAssign()">Auto-fill missing budgets</button>
 <button mat-raised-button (click)="generateCsv()">Export to .csv</button>
 <button *ngIf="!ui.getEditState()" mat-raised-button (click)="ui.afterEdit()">Edit</button>
 <button *ngIf="ui.getEditState()" mat-raised-button (click)="data.saveTrans()">Save</button>
@@ -44,8 +44,8 @@
     <ng-container matColumnDef="amount">
         <th mat-sort-header="amount" mat-header-cell *matHeaderCellDef> Amount </th>
         <td mat-cell *matCellDef="let element">
-            {{element.amount}}
-            <input #self name="amount" matInput type="number" (keyup)="data.edit(element, 'amount', self.value)">
+            <span *ngIf="!ui.getEditState()">{{element.amount}}</span>
+            <input *ngIf="ui.getEditState()" #self name="amount" matInput type="number" value="{{element.amount}}" (keyup)="data.edit(element, 'amount', self.value)">
         </td>
     </ng-container>
 

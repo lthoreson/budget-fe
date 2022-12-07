@@ -76,19 +76,20 @@ export class DataService {
       })
   }
 
-  public edit<T extends keyof Transaction>(input: Transaction, key: T, value: string): void {
-    let numValue = Number(value)
-    const index: number = this.transactions.findIndex((t) => t.id === input.id)
+  public edit(input: Transaction, key: keyof Transaction, value: string): void {
+    const index = this.transactions.findIndex((t) => t.id === input.id)
     const transaction = this.transactions[index]
-    if (key !== "destination") {
-      transaction[key] = value as Transaction[T]
+    function editor<T extends keyof Transaction>(k: T, v: Transaction[T]): void {
+      transaction[k] = v
+    }
+    if (key === "destination") {
+      editor<"destination">("destination",value)
     } else {
-      transaction[key] = numValue as Transaction[T]
+      editor<keyof Transaction>(key, Number(value))
     }
     if (!this.editedTrans.includes(Number(transaction.id))) {
       this.editedTrans.push(Number(transaction.id))
     }
-    console.log(this.editedTrans)
     this.ui.afterEdit()
   }
 
@@ -97,7 +98,10 @@ export class DataService {
       const index = this.transactions.findIndex((t) => t.id === id)
       if (index !== -1) {
         this.http.put<Transaction>(this.url + "/transactions/" + id, this.transactions[index]).pipe(take(1)).subscribe({
-          next: (result) => {this.transactions[index] = result; console.log(result)},
+          next: (result) => {
+            this.transactions[index] = result
+            console.log("saved", result)
+          },
           error: () => this.ui.prompt("Error: Server did not respond")
         })
       }
@@ -127,8 +131,8 @@ export class DataService {
     if (complete) {
       this.ui.prompt("All transactions have been assigned already")
     }
-    if (!found) {
-      this.ui.prompt("No budgets found for these transactions")
+    if (!complete && !found) {
+      this.ui.prompt("Some destinations do not have a default budget. Add or edit a transaction to set the default budget.")
     }
   }
 

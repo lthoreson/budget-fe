@@ -38,7 +38,6 @@ export class DashboardComponent implements OnInit {
 
   public getMeterColor(amount: number): string {
     let color = "primary"
-    console.log(amount)
     if (amount < 50) {
       color = "accent"
     }
