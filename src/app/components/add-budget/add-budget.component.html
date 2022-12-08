@@ -5,8 +5,8 @@
         <input name="name" matInput [(ngModel)]="this.userInput.name">
     </mat-form-field>
     <mat-form-field appearance="fill">
-        <mat-label for="balance">Balance</mat-label>
-        <input name="balance" matInput type="number" [(ngModel)]="this.userInput.total">
+        <mat-label for="total">Total</mat-label>
+        <input name="total" matInput type="number" [(ngModel)]="this.userInput.total">
     </mat-form-field>
     <button mat-raised-button color="primary" (click)="this.addBudget()">Submit</button>
 </form>

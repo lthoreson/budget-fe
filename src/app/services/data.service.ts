@@ -15,6 +15,7 @@ export class DataService {
   private budgets: Budget[] = []
   private transactions: Transaction[] = []
   private transUpdate: Subject<Transaction[]> = new Subject()
+  private budgetUpdate: Subject<Budget[]> = new Subject()
 
   constructor(private http: HttpClient, private ui: UiService) {
     console.log("data service constructed")
@@ -87,6 +88,12 @@ export class DataService {
       error: () => this.ui.prompt("Error: Server did not respond")
     })
   }
+  public saveBudget(input: Budget): void {
+    this.http.put<Budget>(this.url + "/budgets/" + input.id, input).pipe(take(1)).subscribe({
+      next: (result) => console.log("saved budget", result),
+      error: () => this.ui.prompt("Error: Server did not respond")
+    })
+  }
 
   public autoAssign(): void {
     let complete = true
@@ -132,6 +139,7 @@ export class DataService {
       .subscribe({
         next: (result) => {
           this.budgets = result
+          this.budgetUpdate.next(result)
           console.log("budgets received")
         },
         error: (e) => this.ui.prompt("Error: lost connection to server")
@@ -164,6 +172,9 @@ export class DataService {
   }
   public sendUpdate(): Observable<Transaction[]> {
     return this.transUpdate.asObservable()
+  }
+  public sendBudgets(): Observable<Budget[]> {
+    return this.budgetUpdate.asObservable()
   }
   // returns list of all unique destinations
   public getDestinations(): string[] {

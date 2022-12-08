@@ -1,10 +1,20 @@
 <h1>Budgets</h1>
-
 <button mat-mini-fab aria-label="add budget" (click)="this.ui.setMode('add-budget')">
     <mat-icon>add</mat-icon>
 </button>
+<!-- Edit and Save buttons -->
+<button *ngIf="!ui.getEditState()" mat-raised-button (click)="ui.setEdit(true)">Edit</button>
+<button *ngIf="ui.getEditState()" mat-raised-button (click)="saveBudgets()">Save</button>
 
-<ul *ngFor="let budget of this.data.getBudgets()">
-    <p>Name: {{budget.name}} </p>
-    <p>Total: {{budget.total}} </p>
+<ul *ngFor="let budget of this.userInput">
+    <li *ngIf="!ui.getEditState()">Name: {{budget.name}} </li>
+    <mat-form-field  *ngIf="ui.getEditState()" appearance="fill">
+        <mat-label for="name">Name</mat-label>
+        <input name="name" matInput [(ngModel)]="budget.name" (keyup)="edit(budget.id)">
+    </mat-form-field>
+    <li *ngIf="!ui.getEditState()">Total: {{budget.total}} </li>
+    <mat-form-field  *ngIf="ui.getEditState()" appearance="fill">
+        <mat-label for="total">Total</mat-label>
+        <input name="total" matInput type="number" [(ngModel)]="budget.total" (keyup)="edit(budget.id)">
+    </mat-form-field>
 </ul>

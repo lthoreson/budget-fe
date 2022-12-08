@@ -164,7 +164,7 @@
       "id": 17,
       "destination": "Target",
       "amount": 1,
-      "budget": 5,
+      "budget": null,
       "account": 1
     },
     {
@@ -192,13 +192,6 @@
       "id": 21,
       "destination": "Target",
       "amount": 1,
-      "budget": null,
-      "account": 1
-    },
-    {
-      "id": 22,
-      "destination": "",
-      "amount": 4,
       "budget": null,
       "account": 1
     }
