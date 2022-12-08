@@ -66,19 +66,24 @@ export class DataService {
     // otherwise, add the transaction's destination to its budget's associations array
     let modBudget = this.getBudgets().find((budget) => budget.id === input.budget)
     if (!modBudget) {
-      return // budget reference was invalid
+      this.ui.prompt("budget reference was invalid")
+      return
     }
     modBudget.associations.push(input.destination)
     this.http.put(this.url + "/budgets/" + input.budget, modBudget).pipe(take(1))
       .subscribe({
-        next: () => this.ui.setMode("transactions"),
+        next: (result) => {
+          console.log("addAssociation result", result)
+          this.ui.setMode("transactions")
+          this.loadBudgets()
+        },
         error: () => this.ui.prompt("Error: budget association not saved")
       })
   }
 
-  public saveTran(target: Transaction): void {
-    this.http.put<Transaction>(this.url + "/transactions/" + target.id, target).pipe(take(1)).subscribe({
-      next: (result) => console.log("saved", result),
+  public saveTran(input: Transaction): void {
+    this.http.put<Transaction>(this.url + "/transactions/" + input.id, input).pipe(take(1)).subscribe({
+      next: (result) => console.log("saved transaction", result),
       error: () => this.ui.prompt("Error: Server did not respond")
     })
   }

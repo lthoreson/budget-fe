@@ -121,7 +121,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
         }
         target.account = Number(target.account)
         this.data.saveTran(target)
-        console.log(target)
+        this.data.addAssociation(target)
       }
     }
     this.ui.setEdit(false)

@@ -39,6 +39,12 @@
       "associations": [
         "Disney World"
       ]
+    },
+    {
+      "id": 5,
+      "name": "Clothing",
+      "total": 1000,
+      "associations": []
     }
   ],
   "transactions": [
@@ -158,7 +164,7 @@
       "id": 17,
       "destination": "Target",
       "amount": 1,
-      "budget": null,
+      "budget": 5,
       "account": 1
     },
     {
