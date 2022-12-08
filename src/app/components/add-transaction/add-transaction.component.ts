@@ -10,7 +10,7 @@ import { Transaction } from 'src/data/transaction';
 })
 export class AddTransactionComponent implements OnInit {
   public userInput: Transaction = new Transaction(null, '', 0, null, 1)
-  public budgetID: string | undefined = ''
+  public budgetID: string = ''
   public accountType: string = '1'
 
   constructor(public data: DataService, public ui: UiService) {

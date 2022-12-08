@@ -33,7 +33,8 @@
                     <mat-select name="destinationFilter" [(ngModel)]="filters.destination">
                         <mat-option>-- no filter --</mat-option>
                         <mat-option *ngFor="let destination of data.getDestinations()" value="{{destination}}">
-                            {{destination}}</mat-option>
+                            {{destination}}
+                        </mat-option>
                     </mat-select>
                 </mat-form-field>
             </mat-menu>
@@ -47,8 +48,8 @@
         <td mat-cell *matCellDef="let element">
             <!-- Becomes editable when button is pressed -->
             <span *ngIf="!ui.getEditState()">{{element.amount | currency}}</span>
-            <input *ngIf="ui.getEditState()" #self name="amount" matInput type="number" [(ngModel)]="element.amount"
-                value="{{element.amount}}" (keyup)="edit(element)">
+            <input *ngIf="ui.getEditState()" name="amount" matInput type="number" [(ngModel)]="element.amount"
+                [value]="element.amount" (keyup)="edit(element.id)">
         </td>
     </ng-container>
 
@@ -72,7 +73,13 @@
                 </mat-form-field>
             </mat-menu>
         </th>
-        <td mat-cell *matCellDef="let element"> {{getBudgetName(element.budget)}} </td>
+        <td mat-cell *matCellDef="let element">
+            <span *ngIf="!ui.getEditState()">{{getBudgetName(element.budget)}}</span> 
+            <mat-select  *ngIf="ui.getEditState()" name="budget" [(ngModel)]="element.budget" (selectionChange)="edit(element.id)">
+                <mat-option value="">None</mat-option>
+                <mat-option *ngFor="let budget of data.getBudgets()" [value]="budget.id">{{budget.name}}</mat-option>
+            </mat-select>
+        </td>
     </ng-container>
 
     <!-- Account Column -->

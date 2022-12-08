@@ -102,9 +102,9 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     return sorted
   }
 
-  public edit(target: Transaction): void {
-    if (!this.edits.includes(Number(target.id))) {
-      this.edits.push(Number(target.id))
+  public edit(id: number): void {
+    if (!this.edits.includes(Number(id))) {
+      this.edits.push(Number(id))
     }
   }
 
@@ -114,9 +114,14 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       if (index !== -1) {
         const target = this.transactions[index]
         target.amount = Number(target.amount)
-        target.budget = Number(target.budget)
+        if (!target.budget) {
+          target.budget = null
+        } else {
+          target.budget = Number(target.budget)
+        }
         target.account = Number(target.account)
         this.data.saveTran(target)
+        console.log(target)
       }
     }
     this.ui.setEdit(false)
