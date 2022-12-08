@@ -40,7 +40,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
       if (index !== -1) {
         const target = this.userInput[index]
         target.balance = Number(target.balance)
-        this.data.saveAcct(target)
+        this.data.save<Account>(target, "accounts")
       }
     }
     this.ui.setEdit(false)

@@ -21,9 +21,9 @@
             <mat-option value="savings">Savings</mat-option>
         </mat-select>
     </mat-form-field>
-    <p *ngIf="!ui.getEditState()">Balance: {{account.balance | currency}} </p>
+    <p *ngIf="!ui.getEditState()">Beginning Balance: {{account.balance | currency}} </p>
     <mat-form-field  *ngIf="ui.getEditState()" appearance="fill">
-        <mat-label for="balance">Balance</mat-label>
+        <mat-label for="balance">Beginning Balance</mat-label>
         <input name="balance" matInput [(ngModel)]="account.balance" (keyup)="edit(account.id)">
     </mat-form-field>
 </div>

@@ -120,7 +120,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
           target.budget = Number(target.budget)
         }
         target.account = Number(target.account)
-        this.data.saveTran(target)
+        this.data.save<Transaction>(target, "transactions")
         this.data.addAssociation(target)
       }
     }

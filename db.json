@@ -163,7 +163,7 @@
     {
       "id": 17,
       "destination": "Target",
-      "amount": 1,
+      "amount": 10,
       "budget": null,
       "account": 1
     },

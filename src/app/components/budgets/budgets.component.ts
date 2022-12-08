@@ -40,7 +40,7 @@ export class BudgetsComponent implements OnInit, OnDestroy {
       if (index !== -1) {
         const target = this.userInput[index]
         target.total = Number(target.total)
-        this.data.saveBudget(target)
+        this.data.save<Budget>(target, "budgets")
       }
     }
     this.ui.setEdit(false)

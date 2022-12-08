@@ -53,6 +53,7 @@ export class DataService {
       })
   }
 
+  // called whenever you add or save a transaction
   public addAssociation(input: Transaction): void {
     if (!input.budget) {
       this.ui.setMode("transactions")
@@ -83,21 +84,10 @@ export class DataService {
       })
   }
 
-  public saveTran(input: Transaction): void {
-    this.http.put<Transaction>(this.url + "/transactions/" + input.id, input).pipe(take(1)).subscribe({
-      next: (result) => console.log("saved transaction", result),
-      error: () => this.ui.prompt("Error: Server did not respond")
-    })
-  }
-  public saveBudget(input: Budget): void {
-    this.http.put<Budget>(this.url + "/budgets/" + input.id, input).pipe(take(1)).subscribe({
-      next: (result) => console.log("saved budget", result),
-      error: () => this.ui.prompt("Error: Server did not respond")
-    })
-  }
-  public saveAcct(input: Account): void {
-    this.http.put<Account>(this.url + "/accounts/" + input.id, input).pipe(take(1)).subscribe({
-      next: (result) => console.log("saved account", result),
+  // saves edited objects to the server
+  public save<T extends (Transaction | Budget | Account)>(input: T, path: string): void {
+    this.http.put<T>(`${this.url}/${path}/${input.id}`, input).pipe(take(1)).subscribe({
+      next: (result) => console.log(`saved ${path}`, result),
       error: () => this.ui.prompt("Error: Server did not respond")
     })
   }
