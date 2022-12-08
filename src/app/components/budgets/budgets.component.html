@@ -6,15 +6,15 @@
 <button *ngIf="!ui.getEditState()" mat-raised-button (click)="ui.setEdit(true)">Edit</button>
 <button *ngIf="ui.getEditState()" mat-raised-button (click)="saveBudgets()">Save</button>
 
-<ul *ngFor="let budget of this.userInput">
-    <li *ngIf="!ui.getEditState()">Name: {{budget.name}} </li>
+<div *ngFor="let budget of this.userInput">
+    <h2 *ngIf="!ui.getEditState()">{{budget.name}} </h2>
     <mat-form-field  *ngIf="ui.getEditState()" appearance="fill">
         <mat-label for="name">Name</mat-label>
         <input name="name" matInput [(ngModel)]="budget.name" (keyup)="edit(budget.id)">
     </mat-form-field>
-    <li *ngIf="!ui.getEditState()">Total: {{budget.total}} </li>
+    <p *ngIf="!ui.getEditState()">Total: {{budget.total | currency}} </p>
     <mat-form-field  *ngIf="ui.getEditState()" appearance="fill">
         <mat-label for="total">Total</mat-label>
         <input name="total" matInput type="number" [(ngModel)]="budget.total" (keyup)="edit(budget.id)">
     </mat-form-field>
-</ul>
+</div>

@@ -8,7 +8,7 @@
     },
     {
       "id": 2,
-      "name": "Savings",
+      "name": "Cash Under Mattress",
       "type": "savings",
       "balance": 10000
     }
@@ -17,7 +17,7 @@
     {
       "id": 1,
       "name": "Grocery",
-      "total": 0,
+      "total": 500,
       "associations": [
         "Whole Foods"
       ]
@@ -51,35 +51,35 @@
     {
       "id": 1,
       "destination": "Whole Foods",
-      "amount": 5,
+      "amount": 50,
       "budget": 1,
       "account": 1
     },
     {
       "id": 2,
       "destination": "PG&E",
-      "amount": 10,
+      "amount": 100,
       "budget": 3,
       "account": 1
     },
     {
       "id": 3,
       "destination": "Whole Foods",
-      "amount": 5,
+      "amount": 50,
       "budget": 1,
       "account": 1
     },
     {
       "id": 4,
       "destination": "PG&E",
-      "amount": 10,
+      "amount": 100,
       "budget": 3,
       "account": 1
     },
     {
       "id": 5,
       "destination": "PG&E",
-      "amount": 10,
+      "amount": 100,
       "budget": 1,
       "account": 1
     },
@@ -93,7 +93,7 @@
     {
       "id": 7,
       "destination": "Disney World",
-      "amount": 100,
+      "amount": 1500,
       "budget": 4,
       "account": 2
     },

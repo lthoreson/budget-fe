@@ -1,4 +1,4 @@
-<h1>Accounts</h1>
+<h1>Bank Accounts</h1>
 
 <button mat-mini-fab aria-label="add account" (click)="this.ui.setMode('add-account')">
     <mat-icon>add</mat-icon>
@@ -7,13 +7,13 @@
 <button *ngIf="!ui.getEditState()" mat-raised-button (click)="ui.setEdit(true)">Edit</button>
 <button *ngIf="ui.getEditState()" mat-raised-button (click)="saveAccts()">Save</button>
 
-<ul *ngFor="let account of this.userInput">
-    <li *ngIf="!ui.getEditState()">Name: {{account.name}} </li>
+<div *ngFor="let account of this.userInput">
+    <h2 *ngIf="!ui.getEditState()">{{account.name}} </h2>
     <mat-form-field  *ngIf="ui.getEditState()" appearance="fill">
         <mat-label for="name">Name</mat-label>
         <input name="name" matInput [(ngModel)]="account.name" (keyup)="edit(account.id)">
     </mat-form-field>
-    <li *ngIf="!ui.getEditState()">Type: {{account.type}} </li>
+    <p *ngIf="!ui.getEditState()">Type: {{account.type}} </p>
     <mat-form-field  *ngIf="ui.getEditState()" appearance="fill">
         <mat-label for="type">Type</mat-label>
         <mat-select name="type" matInput [(ngModel)]="account.type" (selectionChange)="edit(account.id)">
@@ -21,9 +21,9 @@
             <mat-option value="savings">Savings</mat-option>
         </mat-select>
     </mat-form-field>
-    <li *ngIf="!ui.getEditState()">Balance: {{account.balance}} </li>
+    <p *ngIf="!ui.getEditState()">Balance: {{account.balance | currency}} </p>
     <mat-form-field  *ngIf="ui.getEditState()" appearance="fill">
         <mat-label for="balance">Balance</mat-label>
         <input name="balance" matInput [(ngModel)]="account.balance" (keyup)="edit(account.id)">
     </mat-form-field>
-</ul>
+</div>
