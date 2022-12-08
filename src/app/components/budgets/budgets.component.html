@@ -8,12 +8,16 @@
 
 <div *ngFor="let budget of this.userInput">
     <h2 *ngIf="!ui.getEditState()">{{budget.name}} </h2>
-    <mat-form-field  *ngIf="ui.getEditState()" appearance="fill">
+    <mat-form-field *ngIf="ui.getEditState()" appearance="fill">
         <mat-label for="name">Name</mat-label>
         <input name="name" matInput [(ngModel)]="budget.name" (keyup)="edit(budget.id)">
     </mat-form-field>
     <p *ngIf="!ui.getEditState()">Total: {{budget.total | currency}} </p>
-    <mat-form-field  *ngIf="ui.getEditState()" appearance="fill">
+    <p *ngIf="!ui.getEditState()">Destinations: 
+        <span *ngFor="let destination of budget.associations">{{destination}}
+        </span>
+    </p>
+    <mat-form-field *ngIf="ui.getEditState()" appearance="fill">
         <mat-label for="total">Total</mat-label>
         <input name="total" matInput type="number" [(ngModel)]="budget.total" (keyup)="edit(budget.id)">
     </mat-form-field>
