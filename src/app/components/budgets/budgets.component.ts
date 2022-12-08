@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/services/data.service';
 import { UiService } from 'src/app/services/ui.service';
@@ -9,7 +9,7 @@ import { Budget } from 'src/data/budget';
   templateUrl: './budgets.component.html',
   styleUrls: ['./budgets.component.css']
 })
-export class BudgetsComponent implements OnInit {
+export class BudgetsComponent implements OnInit, OnDestroy {
   private news: Subscription
   public userInput: Budget[] = []
   private edits: number[] = []
@@ -24,6 +24,9 @@ export class BudgetsComponent implements OnInit {
     console.log("budgets initialized")
     this.data.loadBudgets()
   }
+  ngOnDestroy(): void {
+    this.news.unsubscribe()
+  }
 
   public edit(id: number | null): void {
     if (!this.edits.includes(Number(id))) {
@@ -32,7 +35,6 @@ export class BudgetsComponent implements OnInit {
   }
 
   public saveBudgets(): void {
-    console.log(this.edits)
     for (let id of this.edits) {
       const index = this.userInput.findIndex((t) => t.id === id)
       if (index !== -1) {
