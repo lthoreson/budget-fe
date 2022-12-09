@@ -44,7 +44,9 @@
       "id": 5,
       "name": "Clothing",
       "total": 1000,
-      "associations": []
+      "associations": [
+        "Target"
+      ]
     }
   ],
   "transactions": [
@@ -164,7 +166,7 @@
       "id": 17,
       "destination": "Target",
       "amount": 10,
-      "budget": null,
+      "budget": 5,
       "account": 1
     },
     {

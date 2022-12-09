@@ -66,12 +66,13 @@ export class DataService {
         return
       }
     }
-    // otherwise, add the transaction's destination to its budget's associations array
+    // stop if budget field doesn't match an existing budget id
     let modBudget = this.getBudgets().find((budget) => budget.id === input.budget)
     if (!modBudget) {
       this.ui.prompt("budget reference was invalid")
       return
     }
+    // otherwise, add the transaction's destination to its budget's associations array
     modBudget.associations.push(input.destination)
     this.http.put(this.url + "/budgets/" + input.budget, modBudget).pipe(take(1))
       .subscribe({
@@ -101,16 +102,16 @@ export class DataService {
         let associatedBudget = this.budgets.find((budget) => budget.associations.includes(transaction.destination))
         if (associatedBudget) {
           found = true
-          const copy = { ...transaction }
+          let copy = {...transaction}
           copy.budget = associatedBudget.id
-          this.http.put<Transaction>(this.url + "/transactions/" + transaction.id, copy).pipe(take(1))
+          this.http.put<Transaction>(this.url + "/transactions/" + copy.id, copy).pipe(take(1))
             .subscribe({
-              next: (result) => transaction.budget = result.budget,
-              error: (e) => this.ui.prompt("Error: server did not respond")
+              error: () => this.ui.prompt("Error: server did not respond")
             })
         }
       }
     }
+    this.loadTrans()
     if (complete) {
       this.ui.prompt("All transactions have been assigned already")
     }

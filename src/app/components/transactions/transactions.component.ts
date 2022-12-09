@@ -14,7 +14,7 @@ import { Transaction } from 'src/data/transaction';
 export class TransactionsComponent implements OnInit, OnDestroy {
   public displayedColumns: string[] = ['id', 'destination', 'amount', 'budget', 'account']
   private news: Subscription
-  public transactions: Transaction[] = []
+  public transactions1: Transaction[] = []
   private edits: number[] = []
 
   // uses ngModel to track selected filters
@@ -32,7 +32,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   constructor(public data: DataService, public ui: UiService) {
     console.log("transactions constructed")
     this.news = this.data.sendUpdate()
-      .subscribe((result) => this.transactions = result)
+      .subscribe((result) => {this.transactions1 = result; console.log("trans update received")})
   }
 
   ngOnInit(): void {
@@ -61,12 +61,12 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   }
 
   public filterTransactions(): Transaction[] {
-    let result = this.transactions
+    let result = this.transactions1
     for (let k in this.filters) {
       if (this.filters[k as keyof Filter]) {
 
         // if user selects a filter, modify result to include only transactions with matching field value
-        result = result.filter((transaction) => transaction[k as keyof Transaction]?.toString() === this.filters[k as keyof Filter])
+        result = result.filter((transaction) => transaction[k as keyof Transaction] === this.filters[k as keyof Filter])
       }
     }
     return result
@@ -110,9 +110,9 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
   public saveTrans(): void {
     for (let id of this.edits) {
-      const index = this.transactions.findIndex((t) => t.id === id)
+      const index = this.transactions1.findIndex((t) => t.id === id)
       if (index !== -1) {
-        const target = this.transactions[index]
+        const target = this.transactions1[index]
         target.amount = Number(target.amount)
         if (!target.budget) {
           target.budget = null
