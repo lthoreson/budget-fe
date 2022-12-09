@@ -14,7 +14,7 @@ import { Transaction } from 'src/data/transaction';
 export class TransactionsComponent implements OnInit, OnDestroy {
   public displayedColumns: string[] = ['id', 'destination', 'amount', 'budget', 'account']
   private news: Subscription
-  public transactions1: Transaction[] = []
+  public transactionsCopy: Transaction[] = []
   private edits: number[] = []
 
   // uses ngModel to track selected filters
@@ -32,7 +32,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   constructor(public data: DataService, public ui: UiService) {
     console.log("transactions constructed")
     this.news = this.data.sendUpdate()
-      .subscribe((result) => {this.transactions1 = result; console.log("trans update received")})
+      .subscribe((result) => {this.transactionsCopy = result; console.log("trans update received")})
   }
 
   ngOnInit(): void {
@@ -61,7 +61,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   }
 
   public filterTransactions(): Transaction[] {
-    let result = this.transactions1
+    let result = this.transactionsCopy
     for (let k in this.filters) {
       if (this.filters[k as keyof Filter]) {
 
@@ -110,9 +110,9 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
   public saveTrans(): void {
     for (let id of this.edits) {
-      const index = this.transactions1.findIndex((t) => t.id === id)
+      const index = this.transactionsCopy.findIndex((t) => t.id === id)
       if (index !== -1) {
-        const target = this.transactions1[index]
+        const target = this.transactionsCopy[index]
         target.amount = Number(target.amount)
         if (!target.budget) {
           target.budget = null
