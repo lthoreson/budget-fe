@@ -23,7 +23,7 @@ export class DataService {
   }
 
   public addAccount(input: Account): void {
-    this.http.post<Account>(this.url + "/accounts", input).pipe(take(1))
+    this.add<Account>(input, "accounts")
       .subscribe({
         next: (result) => {
           this.accounts.push(result)
@@ -33,7 +33,7 @@ export class DataService {
       })
   }
   public addBudget(input: Budget): void {
-    this.http.post<Budget>(this.url + "/budgets", input).pipe(take(1))
+    this.add<Budget>(input, "budgets")
       .subscribe({
         next: (result) => {
           this.budgets.push(result)
@@ -43,7 +43,7 @@ export class DataService {
       })
   }
   public addTrans(input: Transaction): void {
-    this.http.post<Transaction>(this.url + "/transactions", input).pipe(take(1))
+    this.add<Transaction>(input, "transactions")
       .subscribe({
         next: (result) => {
           this.transactions.push(result)
@@ -51,6 +51,9 @@ export class DataService {
         },
         error: (e) => this.ui.prompt("Error: submission failed")
       })
+  }
+  public add<T extends (Transaction | Budget | Account)>(input: T, path: string): Observable<T> {
+    return this.http.post<T>(`${this.url}/${path}`, input).pipe(take(1))
   }
 
   // called whenever you add or save a transaction

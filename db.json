@@ -19,7 +19,8 @@
       "name": "Grocery",
       "total": 500,
       "associations": [
-        "Whole Foods"
+        "Whole Foods",
+        "Walmart"
       ]
     },
     {
@@ -195,6 +196,13 @@
       "destination": "Target",
       "amount": 1,
       "budget": null,
+      "account": 1
+    },
+    {
+      "id": 22,
+      "destination": "Walmart",
+      "amount": 5,
+      "budget": 1,
       "account": 1
     }
   ]
