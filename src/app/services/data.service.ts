@@ -101,7 +101,10 @@ export class DataService {
   public deleteTrans(id: number): void {
     this.http.delete(`${this.url}/transactions/${id}`).pipe(take(1))
     .subscribe({
-      next: () => this.loadTrans(),
+      next: () => {
+        this.loadTrans()
+        this.ui.prompt("Deleted transaction "+id)
+      },
       error: () => this.ui.prompt("Error: Server did not respond")
     })
   }
