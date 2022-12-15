@@ -103,6 +103,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   }
 
   public edit(id: number): void {
+    console.log(this.transactionsCopy.find((t) => t.id == id))
     if (!this.edits.includes(Number(id))) {
       this.edits.push(Number(id))
     }
@@ -113,13 +114,11 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       const index = this.transactionsCopy.findIndex((t) => t.id === id)
       if (index !== -1) {
         const target = this.transactionsCopy[index]
+        target.account = Number(target.account)
         target.amount = Number(target.amount)
-        if (!target.budget) {
-          target.budget = null
-        } else {
+        if (target.budget != null) {
           target.budget = Number(target.budget)
         }
-        target.account = Number(target.account)
         this.data.save<Transaction>(target, "transactions")
         this.data.addAssociation(target)
       }

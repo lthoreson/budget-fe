@@ -10,7 +10,7 @@ import { UiService } from './ui.service';
   providedIn: 'root'
 })
 export class DataService {
-  private url = 'http://localhost:3000'
+  private url = 'http://localhost:8080'
   private accounts: Account[] = []
   private budgets: Budget[] = []
   private transactions: Transaction[] = []
@@ -29,7 +29,7 @@ export class DataService {
           this.accounts.push(result)
           this.ui.setMode("accounts")
         },
-        error: (e) => this.ui.prompt("Error: submission failed")
+        error: () => this.ui.prompt("Error: submission failed")
       })
   }
   public addBudget(input: Budget): void {
@@ -39,7 +39,7 @@ export class DataService {
           this.budgets.push(result)
           this.ui.setMode("budgets")
         },
-        error: (e) => this.ui.prompt("Error: submission failed")
+        error: () => this.ui.prompt("Error: submission failed")
       })
   }
   public addTrans(input: Transaction): void {
@@ -49,21 +49,22 @@ export class DataService {
           this.transactions.push(result)
           this.addAssociation(result)
         },
-        error: (e) => this.ui.prompt("Error: submission failed")
+        error: () => this.ui.prompt("Error: submission failed")
       })
   }
-  public add<T extends (Transaction | Budget | Account)>(input: T, path: string): Observable<T> {
+  private add<T extends (Transaction | Budget | Account)>(input: T, path: string): Observable<T> {
     return this.http.post<T>(`${this.url}/${path}`, input).pipe(take(1))
   }
 
   // called whenever you add or save a transaction
   public addAssociation(input: Transaction): void {
-    if (!input.budget) {
+    console.log("addAssociation input: ",input)
+    if (input.budget === null) {
       this.ui.setMode("transactions")
       return
     }
     // stop if destination is already associated with a budget
-    for (let budget of this.getBudgets()) {
+    for (let budget of this.budgets) {
       if (budget.associations.includes(input.destination)) {
         this.ui.setMode("transactions")
         return
@@ -77,6 +78,7 @@ export class DataService {
     }
     // otherwise, add the transaction's destination to its budget's associations array
     modBudget.associations.push(input.destination)
+    console.log("updated budget sent to server", modBudget)
     this.http.put(this.url + "/budgets/" + input.budget, modBudget).pipe(take(1))
       .subscribe({
         next: (result) => {
