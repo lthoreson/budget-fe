@@ -98,6 +98,14 @@ export class DataService {
     })
   }
 
+  public deleteTrans(id: number): void {
+    this.http.delete(`${this.url}/transactions/${id}`).pipe(take(1))
+    .subscribe({
+      next: () => this.loadTrans(),
+      error: () => this.ui.prompt("Error: Server did not respond")
+    })
+  }
+
   public autoAssign(): void {
     let complete = true
     let found = false
