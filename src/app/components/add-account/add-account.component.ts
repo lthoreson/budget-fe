@@ -9,7 +9,7 @@ import { Account } from 'src/data/account';
   styleUrls: ['./add-account.component.css']
 })
 export class AddAccountComponent {
-  public userInput: Account = new Account(null,"","checking", 0)
+  public userInput: Account = new Account(null,"","Checking", 0)
 
   constructor(public data: DataService, private ui: UiService) { }
 

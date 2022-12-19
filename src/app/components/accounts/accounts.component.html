@@ -1,13 +1,13 @@
 <h1>Bank Accounts</h1>
 
-<button mat-mini-fab aria-label="add account" (click)="this.ui.setMode('add-account')">
+<button mat-mini-fab aria-label="add account" (click)="ui.setMode('add-account')">
     <mat-icon>add</mat-icon>
 </button>
 <!-- Edit and Save buttons -->
 <button *ngIf="!ui.getEditState()" mat-raised-button (click)="ui.setEdit(true)">Edit</button>
 <button *ngIf="ui.getEditState()" mat-raised-button (click)="saveAccts()">Save</button>
 
-<div *ngFor="let account of this.userInput">
+<div *ngFor="let account of userInput">
     <h2 *ngIf="!ui.getEditState()">{{account.name}} </h2>
     <mat-form-field  *ngIf="ui.getEditState()" appearance="fill">
         <mat-label for="name">Name</mat-label>
@@ -17,8 +17,8 @@
     <mat-form-field  *ngIf="ui.getEditState()" appearance="fill">
         <mat-label for="type">Type</mat-label>
         <mat-select name="type" matInput [(ngModel)]="account.type" (selectionChange)="edit(account.id)">
-            <mat-option value="checking">Checking</mat-option>
-            <mat-option value="savings">Savings</mat-option>
+            <mat-option value="Checking">Checking</mat-option>
+            <mat-option value="Savings">Savings</mat-option>
         </mat-select>
     </mat-form-field>
     <p *ngIf="!ui.getEditState()">Beginning Balance: {{account.balance | currency}} </p>
