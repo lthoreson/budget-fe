@@ -2,11 +2,11 @@
 <form>
     <mat-form-field appearance="fill">
         <mat-label for="name">Name</mat-label>
-        <input name="name" matInput [(ngModel)]="this.userInput.name">
+        <input name="name" matInput [(ngModel)]="userInput.name">
     </mat-form-field>
     <mat-form-field appearance="fill">
         <mat-label for="total">Total</mat-label>
-        <input name="total" matInput type="number" [(ngModel)]="this.userInput.total">
+        <input name="total" matInput type="number" [(ngModel)]="userInput.total" [value]="userInput.total">
     </mat-form-field>
-    <button mat-raised-button color="primary" (click)="this.addBudget()">Submit</button>
+    <button mat-raised-button color="primary" (click)="addBudget()">Submit</button>
 </form>

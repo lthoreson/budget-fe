@@ -58,7 +58,6 @@ export class DataService {
 
   // called whenever you add or save a transaction
   public addAssociation(input: Transaction): void {
-    console.log("addAssociation input: ",input)
     if (input.budget === null) {
       this.ui.setMode("transactions")
       return
@@ -99,6 +98,7 @@ export class DataService {
   }
 
   public deleteTrans(id: number): void {
+    console.log("trans delete attempt: ", id)
     this.http.delete(`${this.url}/transactions/${id}`).pipe(take(1))
     .subscribe({
       next: () => {
@@ -113,7 +113,7 @@ export class DataService {
     let complete = true
     let found = false
     for (let transaction of this.transactions) {
-      if (!transaction.budget) {
+      if (transaction.budget === null) {
         complete = false
         let associatedBudget = this.budgets.find((budget) => budget.associations.includes(transaction.destination))
         if (associatedBudget) {
@@ -122,12 +122,12 @@ export class DataService {
           copy.budget = associatedBudget.id
           this.http.put<Transaction>(this.url + "/transactions/" + copy.id, copy).pipe(take(1))
             .subscribe({
+              next: () => this.loadTrans(),
               error: () => this.ui.prompt("Error: server did not respond")
             })
         }
       }
     }
-    this.loadTrans()
     if (complete) {
       this.ui.prompt("All transactions have been assigned already")
     }

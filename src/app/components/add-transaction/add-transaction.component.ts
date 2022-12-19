@@ -9,9 +9,7 @@ import { Transaction } from 'src/data/transaction';
   styleUrls: ['./add-transaction.component.css']
 })
 export class AddTransactionComponent implements OnInit {
-  public userInput: Transaction = new Transaction(null, '', 0, null, 1)
-  public budgetID: string = ''
-  public accountType: string = '1'
+  public userInput: Transaction = new Transaction(null, '', 0, null, 0)
 
   constructor(public data: DataService, public ui: UiService) {
     console.log("budgets constructed")
@@ -29,15 +27,13 @@ export class AddTransactionComponent implements OnInit {
       this.ui.prompt("Please enter a destination")
       return
     }
-    this.userInput.budget = this.budgetID ? Number(this.budgetID) : null
-    this.userInput.account = Number(this.accountType)
     this.data.addTrans(this.userInput)
   }
 
   public suggestBudget(): void {
     let suggestion = this.data.getBudgets().find((budget) => budget.associations.includes(this.userInput.destination))
     if (suggestion) {
-      this.budgetID = String(suggestion.id)
+      this.userInput.budget = suggestion.id
     }
   }
 
