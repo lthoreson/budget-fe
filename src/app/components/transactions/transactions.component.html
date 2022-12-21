@@ -34,15 +34,10 @@
                 <mat-icon>filter_list</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-                <mat-form-field appearance="fill">
-                    <mat-label for="destinationFilter">Filter</mat-label>
-                    <mat-select name="destinationFilter" [(ngModel)]="filters.destination">
-                        <mat-option>-- no filter --</mat-option>
-                        <mat-option *ngFor="let destination of data.getDestinations()" value="{{destination.name}}">
-                            {{destination.name}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
+                <button mat-menu-item (click)="filters.destination = null">None</button>
+                <button *ngFor="let destination of data.getDestinations()" mat-menu-item (click)="filters.destination = destination.name">
+                    {{destination.name}}
+                </button>
             </mat-menu>
         </th>
         <td mat-cell *matCellDef="let element"> {{element.destination}} </td>
@@ -68,15 +63,10 @@
                 <mat-icon>filter_list</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-                <mat-form-field appearance="fill">
-                    <mat-label for="bFilter">Filter</mat-label>
-                    <mat-select name="bFilter" [(ngModel)]="filters.budget">
-                        <mat-option>-- no filter --</mat-option>
-                        <mat-option *ngFor="let budget of data.getBudgets()" [value]="budget.id">
-                            {{budget.name}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
+                <button mat-menu-item (click)="filters.budget = null">None</button>
+                <button *ngFor="let budget of data.getBudgets()" mat-menu-item (click)="filters.budget = budget.id">
+                    {{budget.name}}
+                </button>
             </mat-menu>
         </th>
         <td mat-cell *matCellDef="let element">
@@ -97,14 +87,10 @@
                 <mat-icon>filter_list</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-                <mat-form-field appearance="fill">
-                    <mat-label for="aFilter">Filter</mat-label>
-                    <mat-select name="aFilter" [(ngModel)]="filters.account">
-                        <mat-option>-- no filter --</mat-option>
-                        <mat-option *ngFor="let account of data.getAccounts()" [value]="account.id">
-                            {{account.name}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
+                <button mat-menu-item (click)="filters.account = null">None</button>
+                <button *ngFor="let account of data.getAccounts()" mat-menu-item (click)="filters.account = account.id">
+                    {{account.name}}
+                </button>
             </mat-menu>
         </th>
         <td mat-cell *matCellDef="let element"> {{getAccountName(element.account)}} </td>
