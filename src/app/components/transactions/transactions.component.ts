@@ -63,7 +63,6 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
   public filterTransactions(): Transaction[] {
     let result = this.transactionsCopy
-    console.log(this.filters)
     for (let k in this.filters) {
       if (this.filters[k as keyof Filter]) {
 

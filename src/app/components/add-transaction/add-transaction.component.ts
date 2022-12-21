@@ -33,7 +33,7 @@ export class AddTransactionComponent implements OnInit {
 
   public suggestBudget(): void {
     let suggestion = this.data.getDestinations().find((destination) => destination.name === this.userInput.destination)
-    if (suggestion) {
+    if (suggestion?.budget) {
       this.userInput.budget = suggestion.budget.id
     }
   }

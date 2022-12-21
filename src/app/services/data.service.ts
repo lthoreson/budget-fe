@@ -63,7 +63,10 @@ export class DataService {
   // saves edited objects to the server
   public save<T extends (Transaction | Budget | Account)>(input: T, path: string): void {
     this.http.put<T>(`${this.url}/${path}/${input.id}`, input).pipe(take(1)).subscribe({
-      next: (result) => console.log(`saved ${path}`, result),
+      next: (result) => {
+        console.log(`saved ${path}`, result)
+        this.loadDest()
+    },
       error: () => this.ui.prompt("Error: Server did not respond")
     })
   }
@@ -86,13 +89,13 @@ export class DataService {
     for (let transaction of this.transactions) {
       if (transaction.budget === null) {
         complete = false
-        let associatedDest = this.destinations.find((dest) => dest.name === transaction.destination)
-        const associatedBudget = associatedDest?.budget.id
-        if (associatedBudget) {
+        let tranDestination = this.destinations.find((dest) => dest.name === transaction.destination)
+        const tranBudgetId = tranDestination?.budget?.id
+        if (tranBudgetId) {
           found = true
-          let copy = {...transaction}
-          copy.budget = associatedBudget
-          this.http.put<Transaction>(this.url + "/transactions/" + copy.id, copy).pipe(take(1))
+          let tranCopy = {...transaction}
+          tranCopy.budget = tranBudgetId
+          this.http.put<Transaction>(this.url + "/transactions/" + tranCopy.id, tranCopy).pipe(take(1))
             .subscribe({
               next: () => this.loadTrans(),
               error: () => this.ui.prompt("Error: server did not respond")
