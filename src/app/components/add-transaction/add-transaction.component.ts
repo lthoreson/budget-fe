@@ -9,17 +9,18 @@ import { Transaction } from 'src/data/transaction';
   styleUrls: ['./add-transaction.component.css']
 })
 export class AddTransactionComponent implements OnInit {
-  public userInput: Transaction = new Transaction(null, '', 0, null, 0)
+  public userInput: Transaction = new Transaction(null, '', 0, null, 1)
 
   constructor(public data: DataService, public ui: UiService) {
-    console.log("budgets constructed")
+    console.log("add trans constructed")
   }
 
   ngOnInit(): void {
-    console.log("budgets initialized")
+    console.log("add trans initialized")
     this.data.loadBudgets()
     this.data.loadAccts()
     this.data.loadTrans()
+    this.data.loadDest()
   }
 
   public addTrans(): void {
@@ -31,9 +32,9 @@ export class AddTransactionComponent implements OnInit {
   }
 
   public suggestBudget(): void {
-    let suggestion = this.data.getBudgets().find((budget) => budget.associations.includes(this.userInput.destination))
+    let suggestion = this.data.getDestinations().find((destination) => destination.name === this.userInput.destination)
     if (suggestion) {
-      this.userInput.budget = suggestion.id
+      this.userInput.budget = suggestion.budget.id
     }
   }
 

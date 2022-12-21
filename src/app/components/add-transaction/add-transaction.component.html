@@ -2,8 +2,8 @@
 <form>
     <mat-form-field appearance="fill">
         <mat-autocomplete #autoBudget="matAutocomplete" (optionSelected)="suggestBudget()">
-            <mat-option *ngFor="let destination of data.getDestinations()" value="{{destination}}">
-                {{destination}}
+            <mat-option *ngFor="let destination of data.getDestinations()" value="{{destination.name}}">
+                {{destination.name}}
             </mat-option>
         </mat-autocomplete>
         <mat-label for="destination">Destination</mat-label>

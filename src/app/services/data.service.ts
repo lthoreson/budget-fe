@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject, take } from 'rxjs';
 import { Account } from 'src/data/account';
-import { Budget } from 'src/data/budget'
+import { Budget } from 'src/data/budget';
+import { Destination } from 'src/data/destination';
 import { Transaction } from 'src/data/transaction';
 import { UiService } from './ui.service';
 
@@ -14,9 +15,11 @@ export class DataService {
   private accounts: Account[] = []
   private budgets: Budget[] = []
   private transactions: Transaction[] = []
+  private destinations: Destination[] = []
   private transUpdate: Subject<Transaction[]> = new Subject()
   private budgetUpdate: Subject<Budget[]> = new Subject()
   private acctUpdate: Subject<Account[]> = new Subject()
+  private destUpdate: Subject<Destination[]> = new Subject()
 
   constructor(private http: HttpClient, private ui: UiService) {
     console.log("data service constructed")
@@ -47,46 +50,14 @@ export class DataService {
       .subscribe({
         next: (result) => {
           this.transactions.push(result)
-          this.addAssociation(result)
+          this.ui.setMode("transactions")
+          this.ui.prompt("a transaction was added")
         },
         error: () => this.ui.prompt("Error: submission failed")
       })
   }
   private add<T extends (Transaction | Budget | Account)>(input: T, path: string): Observable<T> {
     return this.http.post<T>(`${this.url}/${path}`, input).pipe(take(1))
-  }
-
-  // called whenever you add or save a transaction
-  public addAssociation(input: Transaction): void {
-    if (input.budget === null) {
-      this.ui.setMode("transactions")
-      return
-    }
-    // stop if destination is already associated with a budget
-    for (let budget of this.budgets) {
-      if (budget.associations.includes(input.destination)) {
-        this.ui.setMode("transactions")
-        return
-      }
-    }
-    // stop if budget field doesn't match an existing budget id
-    let modBudget = this.getBudgets().find((budget) => budget.id === input.budget)
-    if (!modBudget) {
-      this.ui.prompt("budget reference was invalid")
-      return
-    }
-    // otherwise, add the transaction's destination to its budget's associations array
-    modBudget.associations.push(input.destination)
-    console.log("updated budget sent to server", modBudget)
-    this.http.put(this.url + "/budgets/" + input.budget, modBudget).pipe(take(1))
-      .subscribe({
-        next: (result) => {
-          console.log("addAssociation result", result)
-          this.ui.setMode("transactions")
-          this.loadBudgets()
-        },
-        error: () => this.ui.prompt("Error: budget association not saved")
-      })
   }
 
   // saves edited objects to the server
@@ -115,11 +86,12 @@ export class DataService {
     for (let transaction of this.transactions) {
       if (transaction.budget === null) {
         complete = false
-        let associatedBudget = this.budgets.find((budget) => budget.associations.includes(transaction.destination))
+        let associatedDest = this.destinations.find((dest) => dest.name === transaction.destination)
+        const associatedBudget = associatedDest?.budget.id
         if (associatedBudget) {
           found = true
           let copy = {...transaction}
-          copy.budget = associatedBudget.id
+          copy.budget = associatedBudget
           this.http.put<Transaction>(this.url + "/transactions/" + copy.id, copy).pipe(take(1))
             .subscribe({
               next: () => this.loadTrans(),
@@ -172,6 +144,18 @@ export class DataService {
         error: (e) => this.ui.prompt("Error: lost connection to server")
       })
   }
+  public loadDest(): void {
+    console.log("dest requested")
+    this.http.get<Destination[]>(this.url + "/destinations").pipe(take(1))
+      .subscribe({
+        next: (result) => {
+          this.destinations = result
+          this.destUpdate.next(result)
+          console.log("dest received")
+        },
+        error: (e) => this.ui.prompt("Error: lost connection to server")
+      })
+  }
 
   public getAccounts(): Account[] {
     // console.log("accounts updated from memory")
@@ -185,6 +169,9 @@ export class DataService {
     // console.log("transactions updated from memory")
     return this.transactions
   }
+  public getDestinations(): Destination[] {
+    return this.destinations;
+  }
 
   public sendUpdate(): Observable<Transaction[]> {
     return this.transUpdate.asObservable()
@@ -195,15 +182,5 @@ export class DataService {
   public sendAccts(): Observable<Account[]> {
     return this.acctUpdate.asObservable()
   }
-
-  // returns list of all unique destinations
-  public getDestinations(): string[] {
-    let result: string[] = []
-    for (let transaction of this.transactions) {
-      if (!result.includes(transaction.destination)) {
-        result.push(transaction.destination)
-      }
-    }
-    return result
-  }
+  
 }

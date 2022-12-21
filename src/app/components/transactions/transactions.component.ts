@@ -40,6 +40,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     this.data.loadTrans()
     this.data.loadBudgets()
     this.data.loadAccts()
+    this.data.loadDest()
   }
   ngOnDestroy(): void {
     this.news.unsubscribe()
@@ -120,7 +121,6 @@ export class TransactionsComponent implements OnInit, OnDestroy {
           target.budget = Number(target.budget)
         }
         this.data.save<Transaction>(target, "transactions")
-        this.data.addAssociation(target)
       }
     }
     this.ui.setEdit(false)
