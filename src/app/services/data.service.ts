@@ -84,31 +84,14 @@ export class DataService {
   }
 
   public autoAssign(): void {
-    let complete = true
-    let found = false
-    for (let transaction of this.transactions) {
-      if (transaction.budget === null) {
-        complete = false
-        let tranDestination = this.destinations.find((dest) => dest.name === transaction.destination)
-        const tranBudgetId = tranDestination?.budget?.id
-        if (tranBudgetId) {
-          found = true
-          let tranCopy = {...transaction}
-          tranCopy.budget = tranBudgetId
-          this.http.put<Transaction>(this.url + "/transactions/" + tranCopy.id, tranCopy).pipe(take(1))
-            .subscribe({
-              next: () => this.loadTrans(),
-              error: () => this.ui.prompt("Error: server did not respond")
-            })
-        }
-      }
-    }
-    if (complete) {
-      this.ui.prompt("All transactions have been assigned already")
-    }
-    if (!complete && !found) {
-      this.ui.prompt("Some destinations do not have a default budget. Add or edit a transaction to set the default budget.")
-    }
+    this.http.patch(this.url + "/transactions/autoAssign", null).pipe(take(1))
+      .subscribe({
+        next: () => {
+          this.ui.prompt("Autofill successful")
+          this.loadTrans()
+        },
+        error: (e) => this.ui.prompt(e.error.message)
+      })
   }
 
   public loadAccts(): void {
